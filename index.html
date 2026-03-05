@@ -1,0 +1,5194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Oil War</title>
+    <meta name="description" content="Everything behind this war is OIL!" />
+    <link rel="icon" type="image/x-icon" href="/logo.png" />
+    <meta property="og:title" content="The Oil War" />
+    <meta property="og:description" content="Everything behind this war is OIL!" />
+    <meta
+      property="og:image"
+      content="/2026-01-03 18.32.46.png"
+    />
+    <meta property="og:url" content="" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Oil War" />
+    <meta name="twitter:description" content="Everything behind this war is OIL!" />
+    <meta
+      name="twitter:image"
+      content="/2026-01-03 18.32.46.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Regional colors */
+        --americas-green: #2d8a4e;
+        --americas-light: #4cb963;
+        --middle-east-teal: #1a7a7a;
+        --middle-east-dark: #0d5c5c;
+        --africa-brown: #8b6914;
+        --asia-rust: #a65d3f;
+        --europe-slate: #4a6670;
+        --cis-purple: #6b5b7a;
+
+        /* Venezuela warning */
+        --warning-red: #ff3b3b;
+        --warning-orange: #ff8c00;
+
+        /* UI Colors */
+        --bg-dark: #0a0d12;
+        --bg-card: rgba(12, 16, 22, 0.95);
+        --text-primary: #f0f4f8;
+        --text-secondary: #8899a6;
+        --accent-gold: #d4af37;
+        --accent-orange: #e8732a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg-dark);
+        font-family: "Barlow", sans-serif;
+        color: var(--text-primary);
+      }
+
+      #canvas-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      /* Atmospheric gradient overlay */
+      .atmosphere-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 25%,
+          rgba(10, 13, 18, 0.5) 65%,
+          rgba(10, 13, 18, 0.95) 100%
+        );
+      }
+
+      /* Header */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 1.5rem 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        pointer-events: none;
+        background: linear-gradient(
+          to bottom,
+          rgba(10, 13, 18, 0.9) 0%,
+          transparent 100%
+        );
+      }
+
+      /* Left header section */
+      .header-left {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        pointer-events: auto;
+      }
+
+      .brand-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        color: var(--accent-gold);
+        letter-spacing: 0.1em;
+        text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+      }
+
+      .contract-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: flex-start;
+      }
+
+      .contract-label {
+        font-family: "Inter", sans-serif;
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+      }
+
+      .contract-address {
+        font-family: "Inter", monospace;
+        font-size: 0.65rem;
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.4rem 0.6rem;
+        border-radius: 4px;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .copy-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        padding: 0.4rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--accent-gold);
+      }
+
+      .copy-btn.copied {
+        background: rgba(45, 138, 78, 0.3);
+        color: #4cb963;
+      }
+
+      .copy-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .social-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: flex-start;
+        margin-top: 0.25rem;
+      }
+
+      .social-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: none;
+        color: var(--text-secondary);
+        padding: 0.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+
+      .social-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-primary);
+        transform: translateY(-1px);
+      }
+
+      .social-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .info-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.2),
+          rgba(212, 175, 55, 0.1)
+        );
+        border: 1px solid rgba(212, 175, 55, 0.3);
+      }
+
+      .info-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.3),
+          rgba(212, 175, 55, 0.2)
+        );
+        border-color: rgba(212, 175, 55, 0.5);
+        color: var(--accent-gold);
+      }
+
+      /* Header Right - Buttons */
+      .header-right {
+        pointer-events: auto;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .news-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(232, 115, 42, 0.2),
+          rgba(232, 115, 42, 0.1)
+        );
+        border: 1px solid rgba(232, 115, 42, 0.3);
+        color: var(--text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Barlow", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .news-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(232, 115, 42, 0.3),
+          rgba(232, 115, 42, 0.2)
+        );
+        border-color: rgba(232, 115, 42, 0.5);
+        color: var(--accent-orange);
+        transform: translateY(-1px);
+      }
+
+      .news-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .news-btn .pulse-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--accent-orange);
+        border-radius: 50%;
+        animation: pulse-news 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse-news {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+      }
+
+      /* News Panel */
+      .news-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 380px;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(12, 16, 22, 0.98) 0%,
+          rgba(8, 10, 14, 0.98) 100%
+        );
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 500;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .news-panel.active {
+        transform: translateX(0);
+      }
+
+      .news-panel-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+
+      .news-panel-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: var(--accent-orange);
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .news-panel-title svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .news-panel-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .news-panel-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--text-primary);
+      }
+
+      .news-panel-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .news-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+      }
+
+      .news-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .news-item-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .news-item-source {
+        font-size: 0.65rem;
+        color: var(--accent-orange);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .news-item-time {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        opacity: 0.7;
+      }
+
+      .news-item-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+      }
+
+      .news-item-summary {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .news-item-tag {
+        display: inline-block;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(232, 115, 42, 0.15);
+        color: var(--accent-orange);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .news-item-tag.venezuela {
+        background: rgba(255, 59, 59, 0.15);
+        color: var(--warning-red);
+      }
+
+      .news-item-tag.opec {
+        background: rgba(26, 122, 122, 0.15);
+        color: #2dd4bf;
+      }
+
+      .news-item-tag.iran {
+        background: rgba(255, 140, 0, 0.15);
+        color: #ff8c00;
+      }
+
+      .news-item-tag.hormuz {
+        background: rgba(220, 38, 38, 0.15);
+        color: #f87171;
+      }
+
+      .news-panel-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+      }
+
+      .news-update-time {
+        font-size: 0.65rem;
+        color: var(--text-secondary);
+        text-align: center;
+        opacity: 0.7;
+      }
+
+      /* Tensions Button */
+      .tensions-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.2),
+          rgba(56, 189, 248, 0.1)
+        );
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: var(--text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Barlow", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .tensions-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.3),
+          rgba(56, 189, 248, 0.2)
+        );
+        border-color: rgba(56, 189, 248, 0.5);
+        color: #38bdf8;
+        transform: translateY(-1px);
+      }
+
+      .tensions-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .tensions-btn .radar-ping {
+        width: 6px;
+        height: 6px;
+        background: #38bdf8;
+        border-radius: 50%;
+        animation: radar-pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes radar-pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(1.3);
+          box-shadow: 0 0 8px 2px rgba(56, 189, 248, 0.3);
+        }
+      }
+
+      /* Tensions Panel */
+      .tensions-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 420px;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(8, 20, 30, 0.98) 0%,
+          rgba(6, 14, 22, 0.98) 100%
+        );
+        border-left: 1px solid rgba(56, 189, 248, 0.2);
+        z-index: 500;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tensions-panel.active {
+        transform: translateX(0);
+      }
+
+      .tensions-panel-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(56, 189, 248, 0.1),
+          transparent
+        );
+      }
+
+      .tensions-panel-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: #38bdf8;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .tensions-panel-title svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .tensions-panel-close {
+        background: rgba(56, 189, 248, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .tensions-panel-close:hover {
+        background: rgba(56, 189, 248, 0.2);
+        color: var(--text-primary);
+      }
+
+      .tensions-panel-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .tensions-item {
+        background: rgba(56, 189, 248, 0.03);
+        border: 1px solid rgba(56, 189, 248, 0.1);
+        border-left: 3px solid #38bdf8;
+        border-radius: 0 10px 10px 0;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .tensions-item:hover {
+        background: rgba(56, 189, 248, 0.06);
+        border-color: rgba(56, 189, 248, 0.2);
+      }
+
+      .tensions-item-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .tensions-item-region {
+        font-size: 0.65rem;
+        color: #38bdf8;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tensions-item-status {
+        font-size: 0.55rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+
+      .tensions-item-status.critical {
+        background: rgba(255, 59, 59, 0.2);
+        color: var(--warning-red);
+      }
+
+      .tensions-item-status.high {
+        background: rgba(255, 140, 0, 0.2);
+        color: var(--warning-orange);
+      }
+
+      .tensions-item-status.elevated {
+        background: rgba(212, 175, 55, 0.2);
+        color: var(--accent-gold);
+      }
+
+      .tensions-item-status.emerging {
+        background: rgba(56, 189, 248, 0.2);
+        color: #38bdf8;
+      }
+
+      .tensions-item-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+      }
+
+      .tensions-item-summary {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .tensions-item-parties {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+      }
+
+      .tensions-item-party {
+        display: inline-block;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(56, 189, 248, 0.1);
+        color: #38bdf8;
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tensions-item-stakes {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(212, 175, 55, 0.15);
+        color: var(--accent-gold);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+      }
+
+      .tensions-panel-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(56, 189, 248, 0.2);
+        flex-shrink: 0;
+      }
+
+      .tensions-disclaimer {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        text-align: center;
+        opacity: 0.6;
+        line-height: 1.4;
+      }
+
+      /* Wars Button */
+      .wars-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(139, 90, 43, 0.2),
+          rgba(139, 90, 43, 0.1)
+        );
+        border: 1px solid rgba(139, 90, 43, 0.3);
+        color: var(--text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Barlow", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .wars-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(139, 90, 43, 0.3),
+          rgba(139, 90, 43, 0.2)
+        );
+        border-color: rgba(139, 90, 43, 0.5);
+        color: #d4a855;
+        transform: translateY(-1px);
+      }
+
+      .wars-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Wars Panel */
+      .wars-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 420px;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(20, 16, 10, 0.98) 0%,
+          rgba(14, 12, 8, 0.98) 100%
+        );
+        border-left: 1px solid rgba(139, 90, 43, 0.2);
+        z-index: 500;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .wars-panel.active {
+        transform: translateX(0);
+      }
+
+      .wars-panel-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(139, 90, 43, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(139, 90, 43, 0.15),
+          transparent
+        );
+      }
+
+      .wars-panel-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: #d4a855;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .wars-panel-title svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .wars-panel-close {
+        background: rgba(139, 90, 43, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .wars-panel-close:hover {
+        background: rgba(139, 90, 43, 0.2);
+        color: var(--text-primary);
+      }
+
+      .wars-panel-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .wars-item {
+        background: rgba(139, 90, 43, 0.03);
+        border: 1px solid rgba(139, 90, 43, 0.1);
+        border-left: 3px solid #d4a855;
+        border-radius: 0 10px 10px 0;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+      }
+
+      .wars-item:hover {
+        background: rgba(139, 90, 43, 0.06);
+        border-color: rgba(139, 90, 43, 0.2);
+      }
+
+      .wars-item-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .wars-item-region {
+        font-size: 0.65rem;
+        color: #d4a855;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .wars-item-date {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        opacity: 0.7;
+      }
+
+      .wars-item-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+      }
+
+      .wars-item-summary {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .wars-item-tag {
+        display: inline-block;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(139, 90, 43, 0.15);
+        color: #d4a855;
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        margin-right: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .wars-item-casualties {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(255, 59, 59, 0.15);
+        color: var(--warning-red);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        margin-right: 0.25rem;
+      }
+
+      .wars-panel-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(139, 90, 43, 0.2);
+        flex-shrink: 0;
+      }
+
+      .wars-disclaimer {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        text-align: center;
+        opacity: 0.6;
+        line-height: 1.4;
+      }
+
+      /* War Crimes Button */
+      .crimes-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 59, 59, 0.2),
+          rgba(255, 59, 59, 0.1)
+        );
+        border: 1px solid rgba(255, 59, 59, 0.3);
+        color: var(--text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Barlow", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .crimes-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 59, 59, 0.3),
+          rgba(255, 59, 59, 0.2)
+        );
+        border-color: rgba(255, 59, 59, 0.5);
+        color: var(--warning-red);
+        transform: translateY(-1px);
+      }
+
+      .crimes-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* War Crimes Panel */
+      .crimes-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(18, 12, 12, 0.98) 0%,
+          rgba(12, 8, 8, 0.98) 100%
+        );
+        border-left: 1px solid rgba(255, 59, 59, 0.2);
+        z-index: 500;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .crimes-panel.active {
+        transform: translateX(0);
+      }
+
+      .crimes-panel-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 59, 59, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        background: linear-gradient(90deg, rgba(255, 59, 59, 0.1), transparent);
+      }
+
+      .crimes-panel-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: var(--warning-red);
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .crimes-panel-title svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .crimes-panel-close {
+        background: rgba(255, 59, 59, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .crimes-panel-close:hover {
+        background: rgba(255, 59, 59, 0.2);
+        color: var(--text-primary);
+      }
+
+      .crimes-panel-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .crimes-item {
+        background: rgba(255, 59, 59, 0.03);
+        border: 1px solid rgba(255, 59, 59, 0.1);
+        border-left: 3px solid var(--warning-red);
+        border-radius: 0 10px 10px 0;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s ease;
+      }
+
+      .crimes-item:hover {
+        background: rgba(255, 59, 59, 0.06);
+        border-color: rgba(255, 59, 59, 0.2);
+      }
+
+      .crimes-item-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .crimes-item-region {
+        font-size: 0.65rem;
+        color: var(--warning-red);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .crimes-item-date {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        opacity: 0.7;
+      }
+
+      .crimes-item-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+      }
+
+      .crimes-item-summary {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .crimes-item-tag {
+        display: inline-block;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        background: rgba(255, 59, 59, 0.15);
+        color: var(--warning-red);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        margin-right: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .crimes-panel-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(255, 59, 59, 0.2);
+        flex-shrink: 0;
+      }
+
+      .crimes-disclaimer {
+        font-size: 0.6rem;
+        color: var(--text-secondary);
+        text-align: center;
+        opacity: 0.6;
+        line-height: 1.4;
+      }
+
+      /* Info Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal {
+        background: linear-gradient(
+          145deg,
+          rgba(20, 25, 35, 0.98),
+          rgba(12, 16, 22, 0.98)
+        );
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: 16px;
+        padding: 2.5rem;
+        max-width: 560px;
+        margin: 1rem;
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.3s ease;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-overlay.active .modal {
+        transform: translateY(0) scale(1);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .modal-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        color: var(--accent-gold);
+        letter-spacing: 0.1em;
+      }
+
+      .modal-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--text-primary);
+      }
+
+      .modal-body {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-secondary);
+      }
+
+      .modal-body p {
+        margin-bottom: 1.25rem;
+      }
+
+      .modal-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .modal-body strong {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .modal-body .highlight {
+        color: var(--warning-red);
+        font-weight: 600;
+      }
+
+      /* Legend panel */
+      .legend-panel {
+        position: fixed;
+        bottom: 2rem;
+        left: 2rem;
+        z-index: 100;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1.25rem;
+        backdrop-filter: blur(10px);
+        min-width: 200px;
+      }
+
+      .legend-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.8rem;
+      }
+
+      .legend-color {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+
+      .legend-label {
+        color: var(--text-secondary);
+      }
+
+      .legend-value {
+        margin-left: auto;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      /* Info Panel */
+      .info-panel {
+        position: fixed;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100;
+        width: 340px;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(15px);
+        overflow: hidden;
+      }
+
+      .info-panel.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .info-panel.venezuela {
+        border-color: rgba(255, 59, 59, 0.5);
+        box-shadow: 0 0 40px rgba(255, 59, 59, 0.2);
+      }
+
+      .info-panel.eliminated {
+        border-color: rgba(139, 0, 0, 0.7);
+        box-shadow: 0 0 50px rgba(139, 0, 0, 0.4), inset 0 0 30px rgba(139, 0, 0, 0.1);
+      }
+
+      .info-panel.engaging {
+        border-color: rgba(255, 140, 0, 0.6);
+        box-shadow: 0 0 40px rgba(255, 140, 0, 0.3);
+        animation: engaging-panel-pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes engaging-panel-pulse {
+        0%, 100% { box-shadow: 0 0 40px rgba(255, 140, 0, 0.3); }
+        50% { box-shadow: 0 0 70px rgba(255, 100, 0, 0.5), 0 0 100px rgba(255, 60, 0, 0.2); }
+      }
+
+      .info-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.7rem;
+        border-radius: 4px;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+      }
+
+      .info-status-badge.eliminated {
+        background: linear-gradient(90deg, rgba(139, 0, 0, 0.4), rgba(80, 0, 0, 0.3));
+        border: 1px solid rgba(255, 50, 50, 0.5);
+        color: #ff4444;
+        animation: eliminated-flash 1.5s ease-in-out infinite;
+      }
+
+      @keyframes eliminated-flash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+
+      .info-status-badge.engaging {
+        background: linear-gradient(90deg, rgba(255, 100, 0, 0.3), rgba(255, 60, 0, 0.2));
+        border: 1px solid rgba(255, 140, 0, 0.5);
+        color: #ff8c00;
+        animation: engaging-badge-pulse 1s ease-in-out infinite;
+      }
+
+      @keyframes engaging-badge-pulse {
+        0%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(255, 140, 0, 0.5); }
+        50% { opacity: 0.8; text-shadow: 0 0 15px rgba(255, 140, 0, 0.8); }
+      }
+
+      .tooltip.eliminated {
+        border-color: rgba(139, 0, 0, 0.6);
+      }
+
+      .tooltip.engaging {
+        border-color: rgba(255, 140, 0, 0.5);
+      }
+
+      .tooltip-status {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .tooltip-status.eliminated {
+        color: #ff4444;
+      }
+
+      .tooltip-status.engaging {
+        color: #ff8c00;
+      }
+
+      .info-header {
+        padding: 1.5rem;
+        position: relative;
+      }
+
+      .info-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+      }
+
+      .info-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--text-primary);
+      }
+
+      .info-flag {
+        width: 48px;
+        height: 32px;
+        border-radius: 4px;
+        margin-bottom: 0.75rem;
+        object-fit: cover;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .info-country {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        color: var(--text-primary);
+        line-height: 1.1;
+      }
+
+      .info-rank {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        color: var(--accent-gold);
+        text-transform: uppercase;
+      }
+
+      .info-warning {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 59, 59, 0.2),
+          rgba(255, 140, 0, 0.2)
+        );
+        border: 1px solid rgba(255, 59, 59, 0.3);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .info-warning svg {
+        width: 18px;
+        height: 18px;
+        color: var(--warning-red);
+        flex-shrink: 0;
+      }
+
+      .info-warning-text {
+        font-size: 0.75rem;
+        color: var(--warning-orange);
+        font-weight: 500;
+      }
+
+      .info-body {
+        padding: 0 1.5rem 1.5rem;
+      }
+
+      .info-stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .info-stat {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1rem;
+        border-radius: 8px;
+      }
+
+      .info-stat-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+      }
+
+      .info-stat-value {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.6rem;
+        color: var(--text-primary);
+      }
+
+      .info-stat-value span {
+        font-family: "Barlow", sans-serif;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .info-bar-container {
+        margin-top: 0.5rem;
+      }
+
+      .info-bar-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.4rem;
+      }
+
+      .info-bar-bg {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .info-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Controls hint */
+      .controls-hint {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 100;
+        text-align: right;
+        pointer-events: none;
+      }
+
+      .controls-hint p {
+        font-size: 0.65rem;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+        margin-bottom: 0.4rem;
+        opacity: 0.7;
+      }
+
+      .controls-hint .key {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        margin-right: 0.4rem;
+        font-size: 0.6rem;
+        font-weight: 500;
+      }
+
+      /* Tooltip */
+      .tooltip {
+        position: fixed;
+        z-index: 200;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        backdrop-filter: blur(10px);
+        max-width: 220px;
+      }
+
+      .tooltip.visible {
+        opacity: 1;
+      }
+
+      .tooltip.venezuela {
+        border-color: rgba(255, 59, 59, 0.4);
+      }
+
+      .tooltip-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .tooltip-flag {
+        width: 24px;
+        height: 16px;
+        border-radius: 2px;
+        object-fit: cover;
+      }
+
+      .tooltip-country {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+      }
+
+      .tooltip-reserves {
+        font-size: 0.75rem;
+        color: var(--accent-gold);
+        font-weight: 500;
+      }
+
+      .tooltip-rank {
+        font-size: 0.65rem;
+        color: var(--text-secondary);
+      }
+
+      .tooltip-warning {
+        font-size: 0.65rem;
+        color: var(--warning-red);
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      /* Loading state */
+      .loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-dark);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1s ease;
+      }
+
+      .loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loading-globe {
+        width: 80px;
+        height: 80px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--accent-gold);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .loading-text {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 0.3em;
+        color: var(--text-primary);
+        margin-top: 1.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive - Tablet */
+      @media (max-width: 1024px) {
+        .legend-panel {
+          bottom: 1.5rem;
+          left: 1.5rem;
+          padding: 1rem;
+          min-width: 180px;
+        }
+        .controls-hint {
+          bottom: 1.5rem;
+          right: 1.5rem;
+        }
+      }
+
+      /* Responsive - Mobile */
+      @media (max-width: 768px) {
+        /* Header adjustments */
+        .header {
+          padding: 0.875rem 1rem;
+        }
+
+        .header-left {
+          gap: 0.375rem;
+        }
+
+        .brand-name {
+          font-size: 1.3rem;
+          letter-spacing: 0.08em;
+        }
+
+        .contract-row {
+          gap: 0.375rem;
+        }
+
+        .contract-label {
+          font-size: 0.6rem;
+        }
+
+        .contract-address {
+          max-width: 110px;
+          font-size: 0.58rem;
+          padding: 0.3rem 0.5rem;
+        }
+
+        .copy-btn {
+          padding: 0.3rem;
+        }
+
+        .copy-btn svg {
+          width: 12px;
+          height: 12px;
+        }
+
+        .social-row {
+          gap: 0.375rem;
+          margin-top: 0.125rem;
+        }
+
+        .social-btn {
+          padding: 0.4rem;
+          border-radius: 5px;
+        }
+
+        .social-btn svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        /* Hide legend panel on mobile */
+        .legend-panel {
+          display: none;
+        }
+
+        /* Hide controls hint on mobile (touch is intuitive) */
+        .controls-hint {
+          display: none;
+        }
+
+        /* Info panel slides up from bottom */
+        .info-panel {
+          right: 0;
+          left: 0;
+          top: auto;
+          bottom: 0;
+          width: 100%;
+          max-height: 70vh;
+          overflow-y: auto;
+          transform: translateY(100%);
+          border-radius: 20px 20px 0 0;
+          border-left: none;
+          border-right: none;
+          border-bottom: none;
+        }
+
+        .info-panel.active {
+          transform: translateY(0);
+        }
+
+        .info-header {
+          padding: 1.25rem 1rem;
+        }
+
+        .info-country {
+          font-size: 1.6rem;
+        }
+
+        .info-body {
+          padding: 0 1rem 1.25rem;
+        }
+
+        .info-stat-grid {
+          gap: 0.75rem;
+        }
+
+        .info-stat {
+          padding: 0.875rem;
+        }
+
+        /* Modal adjustments */
+        .modal {
+          padding: 1.5rem;
+          margin: 0.75rem;
+          max-width: 100%;
+          max-height: 85vh;
+          overflow-y: auto;
+          border-radius: 12px;
+        }
+
+        .modal-title {
+          font-size: 1.5rem;
+        }
+
+        .modal-body {
+          font-size: 0.9rem;
+          line-height: 1.7;
+        }
+
+        .modal-body p {
+          margin-bottom: 1rem;
+        }
+
+        /* Tooltip adjustments */
+        .tooltip {
+          max-width: 180px;
+          padding: 0.625rem 0.875rem;
+        }
+
+        .tooltip-country {
+          font-size: 0.85rem;
+        }
+
+        .tooltip-reserves {
+          font-size: 0.7rem;
+        }
+
+        /* News panel mobile */
+        .news-btn {
+          padding: 0.6rem 0.875rem;
+          font-size: 0.7rem;
+        }
+
+        .news-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .news-btn span:not(.pulse-dot) {
+          display: none;
+        }
+
+        .news-btn .pulse-dot {
+          width: 8px;
+          height: 8px;
+        }
+
+        .news-panel {
+          width: 100%;
+          border-left: none;
+        }
+
+        .news-panel-header {
+          padding: 1rem;
+        }
+
+        .news-panel-title {
+          font-size: 1.3rem;
+        }
+
+        .news-panel-content {
+          padding: 0.75rem;
+        }
+
+        .news-item {
+          padding: 0.875rem;
+        }
+
+        .news-item-title {
+          font-size: 0.85rem;
+        }
+
+        .news-item-summary {
+          font-size: 0.7rem;
+        }
+
+        /* Crimes panel mobile */
+        .crimes-btn {
+          padding: 0.6rem 0.875rem;
+          font-size: 0.7rem;
+        }
+
+        .crimes-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .crimes-btn span {
+          display: none;
+        }
+
+        .crimes-panel {
+          width: 100%;
+          border-left: none;
+        }
+
+        .crimes-panel-header {
+          padding: 1rem;
+        }
+
+        .crimes-panel-title {
+          font-size: 1.3rem;
+        }
+
+        .crimes-panel-content {
+          padding: 0.75rem;
+        }
+
+        .crimes-item {
+          padding: 0.875rem;
+        }
+
+        .crimes-item-title {
+          font-size: 0.85rem;
+        }
+
+        .crimes-item-summary {
+          font-size: 0.7rem;
+        }
+
+        /* Wars panel mobile */
+        .wars-btn {
+          padding: 0.6rem 0.875rem;
+          font-size: 0.7rem;
+        }
+
+        .wars-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .wars-btn span {
+          display: none;
+        }
+
+        .wars-panel {
+          width: 100%;
+          border-left: none;
+        }
+
+        .wars-panel-header {
+          padding: 1rem;
+        }
+
+        .wars-panel-title {
+          font-size: 1.3rem;
+        }
+
+        .wars-panel-content {
+          padding: 0.75rem;
+        }
+
+        .wars-item {
+          padding: 0.875rem;
+        }
+
+        .wars-item-title {
+          font-size: 0.85rem;
+        }
+
+        .wars-item-summary {
+          font-size: 0.7rem;
+        }
+
+        /* Tensions panel mobile */
+        .tensions-btn {
+          padding: 0.6rem 0.875rem;
+          font-size: 0.7rem;
+        }
+
+        .tensions-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .tensions-btn span:not(.radar-ping) {
+          display: none;
+        }
+
+        .tensions-btn .radar-ping {
+          width: 8px;
+          height: 8px;
+        }
+
+        .tensions-panel {
+          width: 100%;
+          border-left: none;
+        }
+
+        .tensions-panel-header {
+          padding: 1rem;
+        }
+
+        .tensions-panel-title {
+          font-size: 1.3rem;
+        }
+
+        .tensions-panel-content {
+          padding: 0.75rem;
+        }
+
+        .tensions-item {
+          padding: 0.875rem;
+        }
+
+        .tensions-item-title {
+          font-size: 0.85rem;
+        }
+
+        .tensions-item-summary {
+          font-size: 0.7rem;
+        }
+      }
+
+      /* Small mobile */
+      @media (max-width: 480px) {
+        .header {
+          padding: 0.75rem;
+        }
+
+        .brand-name {
+          font-size: 1.15rem;
+        }
+
+        .contract-address {
+          max-width: 90px;
+          font-size: 0.55rem;
+          padding: 0.25rem 0.4rem;
+        }
+
+        .social-btn {
+          padding: 0.35rem;
+        }
+
+        .social-btn svg {
+          width: 14px;
+          height: 14px;
+        }
+
+        .info-panel {
+          max-height: 75vh;
+        }
+
+        .info-header {
+          padding: 1rem 0.875rem;
+        }
+
+        .info-country {
+          font-size: 1.4rem;
+        }
+
+        .info-flag {
+          width: 40px;
+          height: 27px;
+        }
+
+        .info-body {
+          padding: 0 0.875rem 1rem;
+        }
+
+        .info-stat-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 0.5rem;
+        }
+
+        .info-stat {
+          padding: 0.75rem;
+        }
+
+        .info-stat-value {
+          font-size: 1.4rem;
+        }
+
+        .modal {
+          padding: 1.25rem;
+          margin: 0.5rem;
+        }
+
+        .modal-header {
+          margin-bottom: 1rem;
+          padding-bottom: 0.75rem;
+        }
+
+        .modal-title {
+          font-size: 1.3rem;
+        }
+
+        .modal-body {
+          font-size: 0.85rem;
+        }
+      }
+
+      /* Landscape mode on mobile */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .info-panel {
+          max-height: 85vh;
+          left: 50%;
+          right: auto;
+          width: 340px;
+          transform: translateX(-50%) translateY(100%);
+        }
+
+        .info-panel.active {
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Touch-friendly tap targets */
+      @media (hover: none) and (pointer: coarse) {
+        .copy-btn,
+        .social-btn,
+        .info-close,
+        .modal-close {
+          min-width: 44px;
+          min-height: 44px;
+        }
+      }
+
+      /* Splash screen */
+      .splash-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3000;
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.6s ease;
+      }
+
+      .splash-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .splash-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .splash-gradient {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+        pointer-events: none;
+      }
+
+      .splash-controls {
+        position: absolute;
+        bottom: 12vh;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .splash-btn {
+        padding: 0.9rem 2.8rem;
+        border-radius: 999px;
+        border: 1px solid rgba(212, 175, 55, 0.7);
+        background: radial-gradient(circle at top, rgba(232, 115, 42, 0.85), rgba(10, 10, 10, 0.9));
+        color: #f5f5f5;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        box-shadow: 0 0 40px rgba(232, 115, 42, 0.6);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .splash-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 0 55px rgba(232, 115, 42, 0.9);
+        background: radial-gradient(circle at top, rgba(255, 160, 70, 0.95), rgba(15, 12, 8, 0.98));
+      }
+
+      .splash-btn span.dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ffcc66;
+        box-shadow: 0 0 12px rgba(255, 204, 102, 0.9);
+      }
+
+      .splash-subtitle {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(245, 245, 245, 0.75);
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        .splash-controls {
+          bottom: 10vh;
+        }
+
+        .splash-btn {
+          padding: 0.8rem 2.1rem;
+          font-size: 1.05rem;
+          letter-spacing: 0.16em;
+        }
+
+        .splash-subtitle {
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="splash-overlay" id="splash-overlay">
+      <video
+        id="splash-video"
+        class="splash-video"
+        src="splash.mp4"
+        autoplay
+        muted
+        playsinline
+      ></video>
+      <div class="splash-gradient"></div>
+      <div class="splash-controls">
+        <button class="splash-btn" id="splash-btn" style="display: none">
+          <span class="dot"></span>
+          Join the Oil War
+        </button>
+        <div class="splash-subtitle">
+          Tap to enter the battlefield of global oil
+        </div>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="loading-globe"></div>
+      <div class="loading-text">Loading Globe</div>
+    </div>
+
+    <div class="atmosphere-overlay"></div>
+
+    <div id="canvas-container"></div>
+
+    <!-- Info Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">About OILCOIN</div>
+          <button class="modal-close" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>The world evolves around Oil.</strong></p>
+          <p>
+            Everything behind this war is OIL!, without Oil there is no infrastructure for much of
+            anything in the manner at which society is constructed itself and
+            the world around us.
+          </p>
+          <p>
+            Wars break out throughout history and to this very day over Oil.
+            Hence the spark of Trump moving forward with
+            <span class="highlight">US invasion on Venezuela</span>. Venezuela
+            has the largest proven Oil reserves in the world.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <header class="header">
+      <div class="header-left">
+        <div class="brand-name">The Oil War</div>
+        <div class="contract-row">
+          <span class="contract-label">CA:</span>
+          <span class="contract-address" id="contract-address"
+            >0xd62f2581df0246cef5a633e9f7310189359fa33b</span
+          >
+          <button class="copy-btn" id="copy-btn" title="Copy address">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path
+                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="social-row">
+          <a
+            href="https://x.com/i/communities/2029296453332680851"
+            target="_blank"
+            class="social-btn"
+            title="Join our X Community"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              />
+            </svg>
+          </a>
+          <button
+            class="social-btn info-btn"
+            id="info-btn"
+            title="About OILCOIN"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="tensions-btn" id="tensions-btn" title="Future Tensions">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="12 8 12 12 14 14"></polygon>
+            <path d="M12 2a10 10 0 0 1 0 20"></path>
+          </svg>
+          <span>Tensions</span>
+          <span class="radar-ping"></span>
+        </button>
+        <button class="wars-btn" id="wars-btn" title="Oil Wars">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            ></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M12 18v-6"></path>
+            <path d="M9 15l3-3 3 3"></path>
+          </svg>
+          <span>Wars</span>
+        </button>
+        <button class="crimes-btn" id="crimes-btn" title="Oil War Crimes">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="6" width="18" height="15" rx="2"></rect>
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="12" y1="11" x2="12" y2="17"></line>
+            <line x1="9" y1="14" x2="15" y2="14"></line>
+          </svg>
+          <span>Crimes</span>
+        </button>
+        <button class="news-btn" id="news-btn" title="Oil News">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+            ></path>
+            <line x1="9" y1="9" x2="13" y2="9"></line>
+            <line x1="9" y1="13" x2="13" y2="13"></line>
+          </svg>
+          <span>News</span>
+          <span class="pulse-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="legend-panel">
+      <div class="legend-title">Reserves by Region</div>
+      <div class="legend-item">
+        <div
+          class="legend-color"
+          style="background: var(--americas-green)"
+        ></div>
+        <span class="legend-label">Americas</span>
+        <span class="legend-value">532B</span>
+      </div>
+      <div class="legend-item">
+        <div
+          class="legend-color"
+          style="background: var(--middle-east-teal)"
+        ></div>
+        <span class="legend-label">Middle East</span>
+        <span class="legend-value">836B</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--africa-brown)"></div>
+        <span class="legend-label">Africa</span>
+        <span class="legend-value">125B</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--cis-purple)"></div>
+        <span class="legend-label">Russia & CIS</span>
+        <span class="legend-value">146B</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--asia-rust)"></div>
+        <span class="legend-label">Asia Pacific</span>
+        <span class="legend-value">45B</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: var(--europe-slate)"></div>
+        <span class="legend-label">Europe</span>
+        <span class="legend-value">12B</span>
+      </div>
+    </div>
+
+    <div class="info-panel" id="info-panel">
+      <div class="info-header" id="info-header-bg">
+        <button class="info-close" id="info-close">&times;</button>
+        <img class="info-flag" id="info-flag" src="" alt="Flag" />
+        <div class="info-country" id="info-country">-</div>
+        <div class="info-rank" id="info-rank">-</div>
+        <div class="info-warning" id="info-warning" style="display: none">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            ></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span class="info-warning-text"
+            >Strategic target - Largest oil reserves globally</span
+          >
+        </div>
+        <div class="info-status-badge eliminated" id="info-status-eliminated" style="display: none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          ELIMINATED — Oil reserves seized under US control
+        </div>
+        <div class="info-status-badge engaging" id="info-status-engaging" style="display: none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+            <line x1="12" y1="2" x2="12" y2="6"></line>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+          </svg>
+          CURRENTLY ENGAGING — Active US-Iran military operations
+        </div>
+      </div>
+      <div class="info-body">
+        <div class="info-stat-grid">
+          <div class="info-stat">
+            <div class="info-stat-label">Proven Reserves</div>
+            <div class="info-stat-value" id="info-reserves">-</div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-label">Daily Production</div>
+            <div class="info-stat-value" id="info-production">-</div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-label">Years of Supply</div>
+            <div class="info-stat-value" id="info-years">-</div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-label">World Rank</div>
+            <div class="info-stat-value" id="info-world-rank">-</div>
+          </div>
+        </div>
+        <div class="info-bar-container">
+          <div class="info-bar-label">
+            <span>Share of World Reserves</span>
+            <span id="info-percent">-</span>
+          </div>
+          <div class="info-bar-bg">
+            <div class="info-bar-fill" id="info-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-hint">
+      <p><span class="key">DRAG</span> Rotate globe</p>
+      <p><span class="key">SCROLL</span> Zoom in/out</p>
+      <p><span class="key">CLICK</span> Select country</p>
+    </div>
+
+    <!-- Tensions Panel -->
+    <div class="tensions-panel" id="tensions-panel">
+      <div class="tensions-panel-header">
+        <div class="tensions-panel-title">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="12 8 12 12 14 14"></polygon>
+          </svg>
+          Future Oil Tensions
+        </div>
+        <button class="tensions-panel-close" id="tensions-panel-close">
+          &times;
+        </button>
+      </div>
+      <div class="tensions-panel-content">
+        <div class="tensions-item" style="border-left-color: #ff6600;">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region" style="color: #ff6600;">Strait of Hormuz</span>
+            <span class="tensions-item-status critical">Critical</span>
+          </div>
+          <div class="tensions-item-title">
+            Hormuz Chokepoint: Iran vs The World — ACTIVE WARZONE
+          </div>
+          <div class="tensions-item-summary">
+            21% of global oil passes through this 21-mile wide strait. Iran has
+            repeatedly threatened to close it in response to strikes and sanctions.
+            Tanker seizures, drone attacks, and naval standoffs are now daily occurrences.
+            Full closure would remove 21 million barrels per day from global markets.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Iran</span>
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">Saudi Arabia</span>
+            <span class="tensions-item-party">UAE</span>
+          </div>
+          <span class="tensions-item-stakes">21M bpd Transit</span>
+        </div>
+        <div class="tensions-item" style="border-left-color: #ff6600;">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region" style="color: #ff6600;">Red Sea / Yemen</span>
+            <span class="tensions-item-status critical">Critical</span>
+          </div>
+          <div class="tensions-item-title">
+            Red Sea Crisis: Houthi & Iran-Backed Shipping Attacks
+          </div>
+          <div class="tensions-item-summary">
+            Iran-backed Houthi attacks on commercial shipping have intensified amid
+            the wider Iran war, disrupting Red Sea routes carrying 12% of global trade.
+            US and UK conducting sustained airstrikes in Yemen. Major shipping companies
+            rerouting around Africa, adding massive costs to oil transport.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Houthis</span>
+            <span class="tensions-item-party">Iran</span>
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">UK</span>
+          </div>
+          <span class="tensions-item-stakes">4.8M bpd Transit</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Guyana / Venezuela</span>
+            <span class="tensions-item-status critical">Critical</span>
+          </div>
+          <div class="tensions-item-title">
+            Essequibo Crisis: Venezuela's Territorial Claim
+          </div>
+          <div class="tensions-item-summary">
+            Venezuela claims Guyana's oil-rich Essequibo region (2/3 of Guyana).
+            After ExxonMobil discovered 11 billion barrels, Venezuela held
+            referendum to annex the territory. Military mobilizations on both
+            sides, with US backing Guyana.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Venezuela</span>
+            <span class="tensions-item-party">Guyana</span>
+            <span class="tensions-item-party">ExxonMobil</span>
+            <span class="tensions-item-party">USA</span>
+          </div>
+          <span class="tensions-item-stakes">~11B Barrels</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Arctic</span>
+            <span class="tensions-item-status critical">Critical</span>
+          </div>
+          <div class="tensions-item-title">
+            Arctic Oil Rush: The Next Great Power Conflict
+          </div>
+          <div class="tensions-item-summary">
+            As ice melts, the Arctic is estimated to hold 90 billion barrels of
+            undiscovered oil. Russia, US, Canada, Norway, and Denmark are racing
+            to claim territory. Russia has built 40+ military bases and tested
+            hypersonic missiles in the region.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Russia</span>
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">Canada</span>
+            <span class="tensions-item-party">Norway</span>
+          </div>
+          <span class="tensions-item-stakes">~90B Barrels</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">South China Sea</span>
+            <span class="tensions-item-status critical">Critical</span>
+          </div>
+          <div class="tensions-item-title">
+            South China Sea: Oil, Islands & Military Buildup
+          </div>
+          <div class="tensions-item-summary">
+            China claims 90% of the sea containing 11 billion barrels of oil.
+            Artificial islands militarized with missiles and runways. US
+            conducts "freedom of navigation" operations. Philippines, Vietnam,
+            Malaysia contest claims.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">China</span>
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">Philippines</span>
+            <span class="tensions-item-party">Vietnam</span>
+          </div>
+          <span class="tensions-item-stakes">~11B Barrels</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Greenland</span>
+            <span class="tensions-item-status high">High</span>
+          </div>
+          <div class="tensions-item-title">
+            Greenland: Trump's Strategic Resource Target
+          </div>
+          <div class="tensions-item-summary">
+            Trump has repeatedly expressed interest in acquiring Greenland,
+            citing its vast oil, gas, and rare earth reserves. Denmark rejected
+            offers, but US is increasing military presence. Melting ice is
+            revealing massive untapped resources.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">Denmark</span>
+            <span class="tensions-item-party">Greenland</span>
+          </div>
+          <span class="tensions-item-stakes">~50B Barrels Est.</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">East Mediterranean</span>
+            <span class="tensions-item-status high">High</span>
+          </div>
+          <div class="tensions-item-title">Eastern Mediterranean Gas Wars</div>
+          <div class="tensions-item-summary">
+            Massive gas discoveries sparked disputes between Turkey, Greece,
+            Cyprus, Israel, Egypt, and Lebanon. Turkey sent warships to block
+            drilling. Greece and Turkey nearly clashed in 2020. Pipeline routes
+            highly contested.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Turkey</span>
+            <span class="tensions-item-party">Greece</span>
+            <span class="tensions-item-party">Cyprus</span>
+            <span class="tensions-item-party">Israel</span>
+          </div>
+          <span class="tensions-item-stakes">~230 TCF Gas</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Taiwan Strait</span>
+            <span class="tensions-item-status high">High</span>
+          </div>
+          <div class="tensions-item-title">
+            Taiwan Strait: Energy Chokepoint Risk
+          </div>
+          <div class="tensions-item-summary">
+            88% of China's oil imports pass through potential conflict zones. A
+            Taiwan blockade would disrupt global supply chains. China
+            stockpiling reserves while building alternative pipelines through
+            Russia and Myanmar. US increasing naval presence.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">China</span>
+            <span class="tensions-item-party">Taiwan</span>
+            <span class="tensions-item-party">USA</span>
+            <span class="tensions-item-party">Japan</span>
+          </div>
+          <span class="tensions-item-stakes">Energy Security</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Caspian Sea</span>
+            <span class="tensions-item-status elevated">Elevated</span>
+          </div>
+          <div class="tensions-item-title">
+            Caspian Sea: Five-Way Resource Dispute
+          </div>
+          <div class="tensions-item-summary">
+            Russia, Iran, Azerbaijan, Kazakhstan, and Turkmenistan dispute sea
+            boundaries and resource rights. 2018 convention left key issues
+            unresolved. Competing pipeline routes bypass certain countries. ~48
+            billion barrels at stake.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">Russia</span>
+            <span class="tensions-item-party">Iran</span>
+            <span class="tensions-item-party">Azerbaijan</span>
+            <span class="tensions-item-party">Kazakhstan</span>
+          </div>
+          <span class="tensions-item-stakes">~48B Barrels</span>
+        </div>
+        <div class="tensions-item">
+          <div class="tensions-item-header">
+            <span class="tensions-item-region">Falklands / Malvinas</span>
+            <span class="tensions-item-status elevated">Elevated</span>
+          </div>
+          <div class="tensions-item-title">
+            Falklands Oil: UK-Argentina Tensions Renewed
+          </div>
+          <div class="tensions-item-summary">
+            UK drilling operations around the Falkland Islands have reignited
+            tensions with Argentina. Potential 8.3 billion barrels offshore.
+            Argentina claims sovereignty and has pressured companies not to
+            drill. Military presence increased.
+          </div>
+          <div class="tensions-item-parties">
+            <span class="tensions-item-party">UK</span>
+            <span class="tensions-item-party">Argentina</span>
+          </div>
+          <span class="tensions-item-stakes">~8.3B Barrels</span>
+        </div>
+      </div>
+      <div class="tensions-panel-footer">
+        <div class="tensions-disclaimer">
+          Emerging flashpoints where oil resources may trigger future conflicts
+        </div>
+      </div>
+    </div>
+
+    <!-- Wars Panel -->
+    <div class="wars-panel" id="wars-panel">
+      <div class="wars-panel-header">
+        <div class="wars-panel-title">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            ></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M12 18v-6"></path>
+            <path d="M9 15l3-3 3 3"></path>
+          </svg>
+          Oil Wars
+        </div>
+        <button class="wars-panel-close" id="wars-panel-close">&times;</button>
+      </div>
+      <div class="wars-panel-content">
+        <div class="wars-item" style="border-left-color: #ff6600;">
+          <div class="wars-item-header">
+            <span class="wars-item-region" style="color: #ff6600;">Iran / Persian Gulf</span>
+            <span class="wars-item-date">2025 - Present</span>
+          </div>
+          <div class="wars-item-title">
+            Iran Shadow War: Tanker Seizures & Oil Infrastructure Attacks
+          </div>
+          <div class="wars-item-summary">
+            IRGC Navy seized multiple oil tankers in the Strait of Hormuz and
+            Persian Gulf. Drone and missile attacks struck oil facilities in
+            Saudi Arabia and UAE. Iran's proxy network disrupted 6+ million
+            barrels per day of oil transit across the region.
+          </div>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Tanker Seizures</span>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Proxy War</span>
+          <span class="wars-item-casualties" style="animation: engaging-badge-pulse 1s ease-in-out infinite;">ACTIVE CONFLICT</span>
+        </div>
+        <div class="wars-item" style="border-left-color: #ff6600;">
+          <div class="wars-item-header">
+            <span class="wars-item-region" style="color: #ff6600;">Iran / USA</span>
+            <span class="wars-item-date">2024 - Present</span>
+          </div>
+          <div class="wars-item-title">
+            US-Iran War: Strikes, Sanctions & Strait of Hormuz
+          </div>
+          <div class="wars-item-summary">
+            US launched airstrikes on Iranian military targets and proxy forces
+            across the Middle East. Iran threatened closure of the Strait of
+            Hormuz, through which 21% of global oil transits daily. Maximum
+            pressure sanctions target Iran's 208 billion barrels of reserves.
+          </div>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Airstrikes</span>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Oil Blockade</span>
+          <span class="wars-item-casualties" style="animation: engaging-badge-pulse 1s ease-in-out infinite;">ACTIVE CONFLICT</span>
+        </div>
+        <div class="wars-item" style="border-left-color: #ff6600;">
+          <div class="wars-item-header">
+            <span class="wars-item-region" style="color: #ff6600;">Iran / Israel</span>
+            <span class="wars-item-date">2024 - Present</span>
+          </div>
+          <div class="wars-item-title">
+            Iran-Israel War: Nuclear Threats & Oil Market Chaos
+          </div>
+          <div class="wars-item-summary">
+            Direct military exchanges between Iran and Israel escalated from
+            proxy conflict to open warfare. Israeli strikes targeted Iranian oil
+            terminals at Kharg Island, which handles 90% of Iran's oil exports.
+            Iran retaliated with ballistic missiles targeting Israeli energy
+            infrastructure.
+          </div>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Oil Terminals</span>
+          <span class="wars-item-tag" style="background: rgba(255, 100, 0, 0.2); color: #ff6600;">Nuclear Crisis</span>
+          <span class="wars-item-casualties">Thousands Killed</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Russia / Ukraine</span>
+            <span class="wars-item-date">2022 - Present</span>
+          </div>
+          <div class="wars-item-title">Ukraine War & Energy Geopolitics</div>
+          <div class="wars-item-summary">
+            War disrupted global energy markets. Nord Stream pipelines
+            sabotaged. Both sides target oil refineries. Europe cut off from
+            Russian oil, reshaping global energy trade.
+          </div>
+          <span class="wars-item-tag">Energy War</span>
+          <span class="wars-item-tag">Sanctions</span>
+          <span class="wars-item-casualties">~100,000+ Deaths</span>
+        </div>
+        <div class="wars-item" style="border-left-color: #8b0000; opacity: 0.75;">
+          <div class="wars-item-header">
+            <span class="wars-item-region" style="color: #ff4444;">Venezuela</span>
+            <span class="wars-item-date">2019 - 2026 (ELIMINATED)</span>
+          </div>
+          <div class="wars-item-title">
+            US Seizure of Venezuela's Oil Reserves — ELIMINATED
+          </div>
+          <div class="wars-item-summary">
+            The Trump administration escalated from sanctions to military
+            intervention, seizing control of Venezuela's oil reserves — the
+            largest proven reserves in the world at 303 billion barrels.
+            Venezuelan oil infrastructure now under US-backed control.
+          </div>
+          <span class="wars-item-tag" style="background: rgba(139, 0, 0, 0.2); color: #ff4444;">Seized</span>
+          <span class="wars-item-tag" style="background: rgba(139, 0, 0, 0.2); color: #ff4444;">Intervention</span>
+          <span class="wars-item-casualties" style="text-decoration: line-through;">ELIMINATED</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Yemen</span>
+            <span class="wars-item-date">2015 - Present</span>
+          </div>
+          <div class="wars-item-title">Saudi-UAE War in Yemen</div>
+          <div class="wars-item-summary">
+            Saudi Arabia and UAE coalition bombing Yemen, controlling strategic
+            Bab el-Mandeb strait where 4.8 million barrels of oil pass daily.
+            World's worst humanitarian crisis.
+          </div>
+          <span class="wars-item-tag">Blockade</span>
+          <span class="wars-item-tag">Shipping Routes</span>
+          <span class="wars-item-casualties">~377,000 Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Libya</span>
+            <span class="wars-item-date">2011 - Present</span>
+          </div>
+          <div class="wars-item-title">
+            Libyan Civil War & NATO Intervention
+          </div>
+          <div class="wars-item-summary">
+            NATO intervention to remove Gaddafi, followed by ongoing civil war.
+            Libya holds Africa's largest oil reserves (48B barrels). Oil
+            production collapsed from 1.6M to near-zero bpd.
+          </div>
+          <span class="wars-item-tag">Regime Change</span>
+          <span class="wars-item-tag">Civil War</span>
+          <span class="wars-item-casualties">~30,000+ Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Syria</span>
+            <span class="wars-item-date">2011 - Present</span>
+          </div>
+          <div class="wars-item-title">
+            Syrian Civil War & US Oil Field Occupation
+          </div>
+          <div class="wars-item-summary">
+            US troops remain in Syria's eastern oil fields, preventing Syrian
+            government and Russia from accessing oil revenue. Trump openly
+            stated: "We're keeping the oil."
+          </div>
+          <span class="wars-item-tag">Occupation</span>
+          <span class="wars-item-tag">Pipelines</span>
+          <span class="wars-item-casualties">~500,000+ Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Iraq</span>
+            <span class="wars-item-date">2003 - 2011</span>
+          </div>
+          <div class="wars-item-title">Iraq War - Operation Iraqi Freedom</div>
+          <div class="wars-item-summary">
+            US-led invasion justified by WMD claims, widely believed to be
+            motivated by Iraq's 145 billion barrels of oil reserves. Major oil
+            contracts awarded to Western companies post-invasion.
+          </div>
+          <span class="wars-item-tag">Invasion</span>
+          <span class="wars-item-tag">Occupation</span>
+          <span class="wars-item-casualties">~500,000+ Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Kuwait / Iraq</span>
+            <span class="wars-item-date">1990 - 1991</span>
+          </div>
+          <div class="wars-item-title">Gulf War - Operation Desert Storm</div>
+          <div class="wars-item-summary">
+            Iraq invaded Kuwait over oil disputes and debt. US-led coalition
+            intervened to protect oil supplies. Saddam Hussein set 600+ Kuwaiti
+            oil wells on fire during retreat.
+          </div>
+          <span class="wars-item-tag">Oil Fields</span>
+          <span class="wars-item-tag">Coalition</span>
+          <span class="wars-item-casualties">~100,000 Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Sudan / South Sudan</span>
+            <span class="wars-item-date">1983 - Present</span>
+          </div>
+          <div class="wars-item-title">Sudanese Oil Wars</div>
+          <div class="wars-item-summary">
+            Decades of conflict over oil-rich regions led to South Sudan's
+            independence. Fighting continues over pipeline routes and oil field
+            control. Chinese and Western oil interests compete.
+          </div>
+          <span class="wars-item-tag">Secession</span>
+          <span class="wars-item-tag">Civil War</span>
+          <span class="wars-item-casualties">~2 Million Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Iran / Iraq</span>
+            <span class="wars-item-date">1980 - 1988</span>
+          </div>
+          <div class="wars-item-title">Iran-Iraq War</div>
+          <div class="wars-item-summary">
+            Saddam Hussein invaded Iran targeting oil-rich Khuzestan province.
+            US supported Iraq with weapons and intelligence. Both sides targeted
+            oil infrastructure and tankers.
+          </div>
+          <span class="wars-item-tag">Tanker War</span>
+          <span class="wars-item-tag">Oil Fields</span>
+          <span class="wars-item-casualties">~1 Million Deaths</span>
+        </div>
+        <div class="wars-item">
+          <div class="wars-item-header">
+            <span class="wars-item-region">Nigeria</span>
+            <span class="wars-item-date">1967 - Present</span>
+          </div>
+          <div class="wars-item-title">Niger Delta Conflict & Biafra War</div>
+          <div class="wars-item-summary">
+            Biafra secession partly driven by oil-rich region control. Ongoing
+            insurgency in Niger Delta against oil companies and government. MEND
+            and other groups attack pipelines.
+          </div>
+          <span class="wars-item-tag">Insurgency</span>
+          <span class="wars-item-tag">Resource Curse</span>
+          <span class="wars-item-casualties">~1-3 Million Deaths</span>
+        </div>
+      </div>
+      <div class="wars-panel-footer">
+        <div class="wars-disclaimer">
+          Historical conflicts where oil resources or infrastructure were
+          primary factors
+        </div>
+      </div>
+    </div>
+
+    <!-- War Crimes Panel -->
+    <div class="crimes-panel" id="crimes-panel">
+      <div class="crimes-panel-header">
+        <div class="crimes-panel-title">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="6" width="18" height="15" rx="2"></rect>
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="12" y1="11" x2="12" y2="17"></line>
+            <line x1="9" y1="14" x2="15" y2="14"></line>
+          </svg>
+          Oil War Crimes
+        </div>
+        <button class="crimes-panel-close" id="crimes-panel-close">
+          &times;
+        </button>
+      </div>
+      <div class="crimes-panel-content">
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Iran</span>
+            <span class="crimes-item-date">Feb 2026</span>
+          </div>
+          <div class="crimes-item-title">
+            US-Led Strikes Hit Iranian Oil Refinery Near Civilian Areas
+          </div>
+          <div class="crimes-item-summary">
+            Coalition airstrikes on Iran's Isfahan oil refinery complex caused
+            massive fires in adjacent residential neighborhoods. Reports of 200+
+            civilian casualties. The refinery supplied fuel for 15 million
+            Iranians. Human rights groups call for investigation.
+          </div>
+          <span class="crimes-item-tag">Airstrikes</span>
+          <span class="crimes-item-tag">Civilian Deaths</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Iran</span>
+            <span class="crimes-item-date">Jan 2026</span>
+          </div>
+          <div class="crimes-item-title">
+            Oil Sanctions Trigger Humanitarian Crisis Across Iran
+          </div>
+          <div class="crimes-item-summary">
+            Maximum pressure sanctions have cut Iran's oil revenue by 90%,
+            collapsing the healthcare system and causing medicine shortages.
+            Hospitals report inability to import critical drugs and medical
+            equipment. UN experts warn of collective punishment of 88 million
+            civilians.
+          </div>
+          <span class="crimes-item-tag">Sanctions</span>
+          <span class="crimes-item-tag">Humanitarian</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Iran / Persian Gulf</span>
+            <span class="crimes-item-date">Feb 2026</span>
+          </div>
+          <div class="crimes-item-title">
+            Oil Spill Catastrophe After Tanker Struck in Strait of Hormuz
+          </div>
+          <div class="crimes-item-summary">
+            A targeted strike on an oil tanker in the Strait of Hormuz caused a
+            2 million barrel crude oil spill, devastating marine ecosystems
+            across the Persian Gulf. Fishing communities in Iran, Oman, and UAE
+            report total collapse of their livelihoods.
+          </div>
+          <span class="crimes-item-tag">Environment</span>
+          <span class="crimes-item-tag">Oil Spill</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Venezuela</span>
+            <span class="crimes-item-date">Jan 2026</span>
+          </div>
+          <div class="crimes-item-title">
+            US Sanctions Force Venezuelan Oil Workers into Poverty
+          </div>
+          <div class="crimes-item-summary">
+            Trump administration's escalated sanctions on PDVSA have forced the
+            shutdown of wells in the Orinoco Belt, leaving thousands of workers
+            without income and creating a humanitarian crisis in oil-dependent
+            communities.
+          </div>
+          <span class="crimes-item-tag">Sanctions</span>
+          <span class="crimes-item-tag">Humanitarian</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Yemen</span>
+            <span class="crimes-item-date">Dec 2025</span>
+          </div>
+          <div class="crimes-item-title">
+            Saudi-UAE Coalition Strikes on Yemen Port Infrastructure
+          </div>
+          <div class="crimes-item-summary">
+            Coalition airstrikes continue to target Yemen's port facilities and
+            fuel storage, exacerbating the world's worst humanitarian crisis. UN
+            reports over 150,000 civilian deaths linked to the conflict.
+          </div>
+          <span class="crimes-item-tag">Airstrikes</span>
+          <span class="crimes-item-tag">Blockade</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Nigeria</span>
+            <span class="crimes-item-date">Dec 2025</span>
+          </div>
+          <div class="crimes-item-title">
+            Shell Oil Spills Continue to Devastate Niger Delta Communities
+          </div>
+          <div class="crimes-item-summary">
+            Decades of oil spills in the Niger Delta have destroyed fishing
+            grounds and farmland. Local communities report increased cancer
+            rates and respiratory diseases while awaiting long-promised cleanup
+            operations.
+          </div>
+          <span class="crimes-item-tag">Pollution</span>
+          <span class="crimes-item-tag">Environment</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Russia / Ukraine</span>
+            <span class="crimes-item-date">Jan 2026</span>
+          </div>
+          <div class="crimes-item-title">
+            Oil Infrastructure Targeted as War Continues
+          </div>
+          <div class="crimes-item-summary">
+            Both sides continue targeting energy infrastructure. Attacks on
+            refineries and pipelines have caused environmental disasters and
+            civilian casualties in border regions.
+          </div>
+          <span class="crimes-item-tag">War</span>
+          <span class="crimes-item-tag">Infrastructure</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Iraq</span>
+            <span class="crimes-item-date">Nov 2025</span>
+          </div>
+          <div class="crimes-item-title">
+            Legacy of Oil War: Birth Defects in Basra Continue
+          </div>
+          <div class="crimes-item-summary">
+            Medical researchers document ongoing elevated rates of birth defects
+            and cancer in Basra linked to depleted uranium and toxic residue
+            from US military operations during the Iraq War.
+          </div>
+          <span class="crimes-item-tag">Legacy</span>
+          <span class="crimes-item-tag">Health</span>
+        </div>
+        <div class="crimes-item">
+          <div class="crimes-item-header">
+            <span class="crimes-item-region">Ecuador</span>
+            <span class="crimes-item-date">Oct 2025</span>
+          </div>
+          <div class="crimes-item-title">
+            Chevron Still Evades $9.5B Amazon Pollution Judgment
+          </div>
+          <div class="crimes-item-summary">
+            Indigenous communities in the Ecuadorian Amazon continue fighting
+            for compensation after Texaco (now Chevron) contaminated their land
+            with billions of gallons of toxic waste over decades of operations.
+          </div>
+          <span class="crimes-item-tag">Lawsuit</span>
+          <span class="crimes-item-tag">Indigenous</span>
+        </div>
+      </div>
+      <div class="crimes-panel-footer">
+        <div class="crimes-disclaimer">
+          Information compiled from human rights organizations and verified news
+          sources
+        </div>
+      </div>
+    </div>
+
+    <!-- News Panel -->
+    <div class="news-panel" id="news-panel">
+      <div class="news-panel-header">
+        <div class="news-panel-title">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"
+            ></path>
+          </svg>
+          Oil News
+        </div>
+        <button class="news-panel-close" id="news-panel-close">&times;</button>
+      </div>
+      <div class="news-panel-content">
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Reuters</span>
+            <span class="news-item-time">12 min ago</span>
+          </div>
+          <div class="news-item-title">
+            US B-2 Bombers Strike Iran's Bandar Abbas Naval Base in Overnight Raid
+          </div>
+          <div class="news-item-summary">
+            Pentagon confirmed US stealth bombers struck IRGC Navy headquarters at Bandar Abbas, destroying fast-attack boat pens and anti-ship missile batteries guarding the Strait of Hormuz. Iran's Supreme Leader vowed "decisive retaliation within hours."
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Bloomberg</span>
+            <span class="news-item-time">25 min ago</span>
+          </div>
+          <div class="news-item-title">
+            Brent Crude Surges Past $94 — Highest Since 2022 as Iran War Escalates
+          </div>
+          <div class="news-item-summary">
+            Oil prices rocketed 12% in a single session following the US strikes on Bandar Abbas. Traders are pricing in a potential full Hormuz closure scenario. Goldman Sachs raised its oil target to $120 if the strait is blocked.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">AP News</span>
+            <span class="news-item-time">35 min ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran Fires Ballistic Missiles at US Naval Base in Bahrain
+          </div>
+          <div class="news-item-summary">
+            Iran launched a barrage of 30+ ballistic missiles at the US Fifth Fleet headquarters in Bahrain. US THAAD and Patriot systems intercepted most projectiles. Two missiles struck near the base perimeter. No US casualties reported but regional allies on highest alert.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">CNBC</span>
+            <span class="news-item-time">1 hour ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran Threatens Full Strait of Hormuz Closure After Kharg Island Strikes
+          </div>
+          <div class="news-item-summary">
+            Tehran warned it will block all oil tanker traffic through the Strait of Hormuz if attacks on its oil infrastructure continue. Kharg Island, handling 90% of Iran's crude exports, was struck by Israeli jets. 21% of the world's oil supply hangs in the balance.
+          </div>
+          <span class="news-item-tag hormuz">Hormuz</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Financial Times</span>
+            <span class="news-item-time">1.5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran's Oil Exports Collapse to 200K bpd Under War Conditions
+          </div>
+          <div class="news-item-summary">
+            Iranian crude exports plummeted from 1.5 million to under 200,000 barrels per day as war escalation and intensified sanctions cripple its oil sector. China, Iran's largest buyer, has halted purchases amid US secondary sanctions threats.
+          </div>
+          <span class="news-item-tag iran">Iran Oil</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">OilPrice</span>
+            <span class="news-item-time">2 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            IRGC Seizes Two More Oil Tankers Near Strait of Hormuz
+          </div>
+          <div class="news-item-summary">
+            Iran's Revolutionary Guard seized two oil tankers carrying a combined 4 million barrels near the Strait of Hormuz. International shipping insurers have declared the Persian Gulf a war-risk zone, sending tanker rates to record highs.
+          </div>
+          <span class="news-item-tag hormuz">Hormuz</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">WSJ</span>
+            <span class="news-item-time">2.5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Pentagon Deploys Third Aircraft Carrier to Persian Gulf
+          </div>
+          <div class="news-item-summary">
+            The USS Nimitz strike group joins the USS Eisenhower and USS Lincoln in the largest US naval buildup in the Persian Gulf since 2003. Over 150 aircraft and 15,000 sailors now positioned within striking range of Iranian military targets.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Al Jazeera</span>
+            <span class="news-item-time">3 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran-Backed Houthis Strike Saudi Aramco Oil Facility in Ras Tanura
+          </div>
+          <div class="news-item-summary">
+            Houthi forces launched drones and cruise missiles at Saudi Arabia's Ras Tanura oil terminal, the world's largest offshore oil loading facility. The attack disrupted 3.4 million barrels per day of export capacity. Iran denies directing the strikes.
+          </div>
+          <span class="news-item-tag iran">Iran Proxy</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Reuters</span>
+            <span class="news-item-time">3.5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran Mines Detected in Strait of Hormuz Shipping Lanes
+          </div>
+          <div class="news-item-summary">
+            US Navy minesweepers detected and neutralized multiple sea mines placed in key shipping lanes of the Strait of Hormuz. Intelligence suggests Iran deployed mines from fast-attack boats overnight. All commercial tanker traffic temporarily halted.
+          </div>
+          <span class="news-item-tag hormuz">Hormuz</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Financial Times</span>
+            <span class="news-item-time">4 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            US Sanctions Iran's Shadow Fleet: 60+ Oil Tankers Blacklisted
+          </div>
+          <div class="news-item-summary">
+            The Treasury Department designated over 60 tankers in Iran's "shadow fleet" used to evade sanctions and smuggle crude to China and Syria. An estimated 1.2 million barrels per day of illicit Iranian oil trade is targeted for elimination.
+          </div>
+          <span class="news-item-tag iran">Iran Sanctions</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">BBC</span>
+            <span class="news-item-time">4.5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Israel Strikes Iranian Nuclear Facility at Natanz
+          </div>
+          <div class="news-item-summary">
+            Israeli Air Force jets struck Iran's Natanz uranium enrichment facility in a coordinated operation with the US. Iran's nuclear program reportedly set back by years. Tehran vows nuclear retaliation and calls on Russia and China for support.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">WSJ</span>
+            <span class="news-item-time">5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Persian Gulf Oil Insurance Premiums Triple as Iran War Escalates
+          </div>
+          <div class="news-item-summary">
+            War risk premiums for oil tankers transiting the Persian Gulf have tripled since strikes began. Major shippers are rerouting cargoes, adding $2-4 per barrel to transport costs. Global consumers face higher fuel prices as the conflict intensifies.
+          </div>
+          <span class="news-item-tag hormuz">Shipping</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">CNN</span>
+            <span class="news-item-time">5.5 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Hezbollah Launches 200+ Rockets at Northern Israel in Solidarity with Iran
+          </div>
+          <div class="news-item-summary">
+            Iran's most powerful proxy, Hezbollah, launched its largest-ever barrage of rockets at Israeli cities in the north. Israel's Iron Dome intercepted most, but several struck Haifa's oil refinery district. The multi-front war further destabilizes regional energy infrastructure.
+          </div>
+          <span class="news-item-tag iran">Iran Proxy</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">CNBC</span>
+            <span class="news-item-time">6 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Global Oil Stockpiles Draw Down as Iran Supply Vanishes from Market
+          </div>
+          <div class="news-item-summary">
+            OECD oil inventories fell by 45 million barrels in February — the steepest monthly draw in a decade. With Iran's 3.9 million bpd production offline and Hormuz transit at risk, the IEA is considering a coordinated strategic reserve release.
+          </div>
+          <span class="news-item-tag iran">Iran Oil</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Bloomberg</span>
+            <span class="news-item-time">7 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            China Warns US Against Escalation, Calls for Iran Ceasefire
+          </div>
+          <div class="news-item-summary">
+            Beijing issued a rare direct warning to Washington, saying further strikes on Iran threaten China's energy security. China imports 75% of its oil from the Middle East. Foreign Ministry spokesman called for "immediate de-escalation" and offered to mediate.
+          </div>
+          <span class="news-item-tag iran">Iran Diplomacy</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Reuters</span>
+            <span class="news-item-time">8 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran Retaliates with Drone Swarm Attack on UAE Oil Terminal at Fujairah
+          </div>
+          <div class="news-item-summary">
+            Iran launched 40+ Shahed drones at the Fujairah oil storage terminal in the UAE, one of the world's largest bunkering hubs. Fires reported at storage tanks holding an estimated 10 million barrels. UAE activates emergency oil spill response.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">OilPrice</span>
+            <span class="news-item-time">9 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            OPEC+ Emergency Meeting Called as Iran War Disrupts 6M bpd
+          </div>
+          <div class="news-item-summary">
+            Saudi Arabia called an emergency OPEC+ session after the Iran conflict disrupted an estimated 6 million barrels per day of production and transit. Members debate whether to tap spare capacity or let prices rise to pressure a ceasefire.
+          </div>
+          <span class="news-item-tag opec">OPEC+</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">AP News</span>
+            <span class="news-item-time">10 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            US Gas Prices Hit $5.40/Gallon as Iran Conflict Reaches American Pumps
+          </div>
+          <div class="news-item-summary">
+            Average US gasoline prices surged past $5.40 per gallon, the highest since 2022. Analysts warn prices could reach $7+ if the Strait of Hormuz is fully blocked. The White House announced a 30-million-barrel release from the Strategic Petroleum Reserve.
+          </div>
+          <span class="news-item-tag iran">Iran Impact</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">The Guardian</span>
+            <span class="news-item-time">11 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iran's Isfahan Oil Refinery Devastated: 200+ Civilian Casualties Reported
+          </div>
+          <div class="news-item-summary">
+            Coalition airstrikes on Iran's Isfahan oil refinery complex caused massive fires spreading to adjacent residential neighborhoods. The refinery supplied fuel to 15 million Iranians. Hospitals overwhelmed. Human rights organizations demand investigation.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Bloomberg</span>
+            <span class="news-item-time">12 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Oil Rises With OPEC+, Venezuela in Focus as New Year Kicks Off
+          </div>
+          <div class="news-item-summary">
+            Oil prices inched higher in early trading on January 2, the first session of 2026, as geopolitical tensions provided support after benchmarks posted steepest annual losses since 2020.
+          </div>
+          <span class="news-item-tag opec">OPEC+</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Reuters</span>
+            <span class="news-item-time">14 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Trump: "Iran's Oil Weapon Is Finished" — Threatens Total Naval Blockade
+          </div>
+          <div class="news-item-summary">
+            President Trump declared at a press conference that the US will enforce a total naval blockade of Iran's oil exports if Tehran does not agree to new nuclear terms. Iran's foreign minister called it "an act of war against a sovereign nation."
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">Reuters</span>
+            <span class="news-item-time">16 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Venezuela Oil Operations Halted — US Forces Seize Control of PDVSA Facilities
+          </div>
+          <div class="news-item-summary">
+            Washington imposed final-phase sanctions forcing the complete shutdown of Venezuelan oil exports. US military advisors now oversee key Orinoco Belt facilities. Maduro's government calls it "colonialism" as Venezuela's oil revenues drop to zero.
+          </div>
+          <span class="news-item-tag venezuela">Venezuela</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">CNBC</span>
+            <span class="news-item-time">18 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Iraq's Basra Oil Terminal Hit by Stray Iranian Missile
+          </div>
+          <div class="news-item-summary">
+            A ballistic missile believed to be fired by Iranian forces struck near Iraq's Basra oil export terminal, temporarily halting 1.8 million barrels per day of exports. Iraq demanded both the US and Iran stop using its territory as a battlefield.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">IEA</span>
+            <span class="news-item-time">20 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Global Oil Supply Expected to Exceed Demand by 3.85M bpd
+          </div>
+          <div class="news-item-summary">
+            The International Energy Agency forecasts supply to exceed demand by 3.85 million barrels per day in 2026, equal to nearly 4% of global consumption — but warns the Iran conflict could rapidly flip this into a deficit.
+          </div>
+          <span class="news-item-tag">Supply</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">The National</span>
+            <span class="news-item-time">22 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Saudi-UAE Crisis Over Yemen Deepens, Flights Halted at Aden
+          </div>
+          <div class="news-item-summary">
+            A crisis between OPEC producers Saudi Arabia and the United Arab Emirates over Yemen has deepened after flights were halted at Aden's airport, adding to regional tensions amid the broader Iran conflict.
+          </div>
+          <span class="news-item-tag">Geopolitics</span>
+        </div>
+        <div class="news-item">
+          <div class="news-item-header">
+            <span class="news-item-source">OilPrice</span>
+            <span class="news-item-time">24 hours ago</span>
+          </div>
+          <div class="news-item-title">
+            Russia Offers to Supply Iran with Air Defense Systems Amid US Strikes
+          </div>
+          <div class="news-item-summary">
+            Moscow signaled willingness to provide Iran with advanced S-400 air defense systems, raising fears of a direct US-Russia confrontation. The offer came after US jets destroyed three of Iran's domestic air defense sites in overnight raids.
+          </div>
+          <span class="news-item-tag iran">Iran War</span>
+        </div>
+      </div>
+      <div class="news-panel-footer">
+        <div class="news-update-time">
+          Last updated: Mar 4, 2026 at 10:00 AM UTC
+        </div>
+      </div>
+    </div>
+
+    <div class="tooltip" id="tooltip">
+      <div class="tooltip-header">
+        <img class="tooltip-flag" id="tooltip-flag" src="" alt="" />
+        <span class="tooltip-country" id="tooltip-country">-</span>
+      </div>
+      <div class="tooltip-reserves" id="tooltip-reserves">-</div>
+      <div class="tooltip-rank" id="tooltip-rank">-</div>
+      <div class="tooltip-warning" id="tooltip-warning" style="display: none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2L1 21h22L12 2zm0 3.5L19.5 19h-15L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"
+          />
+        </svg>
+        <span>Strategic target</span>
+      </div>
+      <div class="tooltip-status eliminated" id="tooltip-status-eliminated" style="display: none">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        ELIMINATED
+      </div>
+      <div class="tooltip-status engaging" id="tooltip-status-engaging" style="display: none">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+        CURRENTLY ENGAGING
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Latest Oil Reserve Data (2025)
+      const oilData = [
+        {
+          country: "Venezuela",
+          code: "VE",
+          reserves: 303.2,
+          production: 0.9,
+          lat: 6.42,
+          lng: -66.59,
+          rank: 1,
+          region: "americas",
+          warning: true,
+          status: "eliminated",
+        },
+        {
+          country: "Saudi Arabia",
+          code: "SA",
+          reserves: 267.2,
+          production: 11.1,
+          lat: 23.89,
+          lng: 45.08,
+          rank: 2,
+          region: "middle-east",
+        },
+        {
+          country: "Canada",
+          code: "CA",
+          reserves: 168.1,
+          production: 5.7,
+          lat: 56.13,
+          lng: -106.35,
+          rank: 3,
+          region: "americas",
+        },
+        {
+          country: "Iran",
+          code: "IR",
+          reserves: 208.6,
+          production: 3.9,
+          lat: 32.43,
+          lng: 53.69,
+          rank: 4,
+          region: "middle-east",
+          status: "engaging",
+        },
+        {
+          country: "Iraq",
+          code: "IQ",
+          reserves: 145.0,
+          production: 4.5,
+          lat: 33.22,
+          lng: 43.68,
+          rank: 5,
+          region: "middle-east",
+        },
+        {
+          country: "United Arab Emirates",
+          code: "AE",
+          reserves: 113.0,
+          production: 4.2,
+          lat: 23.42,
+          lng: 53.85,
+          rank: 6,
+          region: "middle-east",
+        },
+        {
+          country: "Kuwait",
+          code: "KW",
+          reserves: 101.5,
+          production: 2.9,
+          lat: 29.31,
+          lng: 47.48,
+          rank: 7,
+          region: "middle-east",
+        },
+        {
+          country: "Russia",
+          code: "RU",
+          reserves: 80.0,
+          production: 10.8,
+          lat: 61.52,
+          lng: 105.32,
+          rank: 8,
+          region: "cis",
+        },
+        {
+          country: "Libya",
+          code: "LY",
+          reserves: 48.4,
+          production: 1.2,
+          lat: 26.34,
+          lng: 17.23,
+          rank: 9,
+          region: "africa",
+        },
+        {
+          country: "United States",
+          code: "US",
+          reserves: 45.0,
+          production: 19.4,
+          lat: 37.09,
+          lng: -95.71,
+          rank: 10,
+          region: "americas",
+        },
+        {
+          country: "Nigeria",
+          code: "NG",
+          reserves: 37.3,
+          production: 1.5,
+          lat: 9.08,
+          lng: 8.68,
+          rank: 11,
+          region: "africa",
+        },
+        {
+          country: "Kazakhstan",
+          code: "KZ",
+          reserves: 30.0,
+          production: 1.9,
+          lat: 48.02,
+          lng: 66.92,
+          rank: 12,
+          region: "cis",
+        },
+        {
+          country: "China",
+          code: "CN",
+          reserves: 28.2,
+          production: 4.2,
+          lat: 35.86,
+          lng: 104.2,
+          rank: 13,
+          region: "asia",
+        },
+        {
+          country: "Qatar",
+          code: "QA",
+          reserves: 25.2,
+          production: 1.8,
+          lat: 25.35,
+          lng: 51.18,
+          rank: 14,
+          region: "middle-east",
+        },
+        {
+          country: "Brazil",
+          code: "BR",
+          reserves: 15.9,
+          production: 3.8,
+          lat: -14.24,
+          lng: -51.93,
+          rank: 15,
+          region: "americas",
+        },
+        {
+          country: "Algeria",
+          code: "DZ",
+          reserves: 12.2,
+          production: 1.0,
+          lat: 28.03,
+          lng: 1.66,
+          rank: 16,
+          region: "africa",
+        },
+        {
+          country: "Angola",
+          code: "AO",
+          reserves: 7.8,
+          production: 1.2,
+          lat: -11.2,
+          lng: 17.87,
+          rank: 17,
+          region: "africa",
+        },
+        {
+          country: "Ecuador",
+          code: "EC",
+          reserves: 8.3,
+          production: 0.5,
+          lat: -1.83,
+          lng: -78.18,
+          rank: 18,
+          region: "americas",
+        },
+        {
+          country: "Azerbaijan",
+          code: "AZ",
+          reserves: 7.0,
+          production: 0.7,
+          lat: 40.14,
+          lng: 47.58,
+          rank: 19,
+          region: "cis",
+        },
+        {
+          country: "Norway",
+          code: "NO",
+          reserves: 6.9,
+          production: 1.9,
+          lat: 60.47,
+          lng: 8.47,
+          rank: 20,
+          region: "europe",
+        },
+        {
+          country: "Mexico",
+          code: "MX",
+          reserves: 5.1,
+          production: 1.9,
+          lat: 23.63,
+          lng: -102.55,
+          rank: 21,
+          region: "americas",
+        },
+        {
+          country: "Oman",
+          code: "OM",
+          reserves: 5.4,
+          production: 1.1,
+          lat: 21.51,
+          lng: 55.92,
+          rank: 22,
+          region: "middle-east",
+        },
+      ];
+
+      // Sort by reserves
+      oilData.sort((a, b) => b.reserves - a.reserves);
+      oilData.forEach((d, i) => (d.rank = i + 1));
+
+      const totalReserves = 1757.0;
+
+      // Regional colors
+      const regionColors = {
+        americas: { main: 0x2d8a4e, light: 0x4cb963, hex: "#2d8a4e" },
+        "middle-east": { main: 0x1a7a7a, light: 0x2ba3a3, hex: "#1a7a7a" },
+        africa: { main: 0x8b6914, light: 0xb8922a, hex: "#8b6914" },
+        cis: { main: 0x6b5b7a, light: 0x8e7ca3, hex: "#6b5b7a" },
+        asia: { main: 0xa65d3f, light: 0xd4795a, hex: "#a65d3f" },
+        europe: { main: 0x4a6670, light: 0x6a8a96, hex: "#4a6670" },
+      };
+
+      // Three.js Setup
+      let scene,
+        camera,
+        renderer,
+        globe,
+        markers = [],
+        warningRings = [],
+        engagingRings = [];
+      let raycaster, mouse;
+      let isDragging = false;
+      let previousMousePosition = { x: 0, y: 0 };
+      let autoRotate = true;
+      let missiles = [], explosions = [], bombers = [], fireParticles = [];
+      let missileSpawnTimer = 0, bomberSpawnTimer = 0;
+      let tankerMarkers = [], hormuzPos = null, iranPos = null, usPos = null;
+
+      function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0d12);
+
+        camera = new THREE.PerspectiveCamera(
+          50,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        camera.position.z = 2.8;
+
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance",
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document
+          .getElementById("canvas-container")
+          .appendChild(renderer.domElement);
+
+        raycaster = new THREE.Raycaster();
+        raycaster.params.Points.threshold = 0.1;
+        mouse = new THREE.Vector2();
+
+        createStarfield();
+        createHighQualityGlobe();
+        createSmoothMarkers();
+        createAtmosphere();
+        addLights();
+        initMissileTargets();
+
+        // Events
+        window.addEventListener("resize", onWindowResize);
+        renderer.domElement.addEventListener("mousemove", onMouseMove);
+        renderer.domElement.addEventListener("mousedown", onMouseDown);
+        renderer.domElement.addEventListener("mouseup", onMouseUp);
+        renderer.domElement.addEventListener("click", onClick);
+        renderer.domElement.addEventListener("wheel", onWheel);
+
+        // Touch events for mobile
+        renderer.domElement.addEventListener("touchstart", onTouchStart, {
+          passive: false,
+        });
+        renderer.domElement.addEventListener("touchmove", onTouchMove, {
+          passive: false,
+        });
+        renderer.domElement.addEventListener("touchend", onTouchEnd, {
+          passive: false,
+        });
+
+        document
+          .getElementById("info-close")
+          .addEventListener("click", closeInfoPanel);
+
+        // Copy button
+        document
+          .getElementById("copy-btn")
+          .addEventListener("click", copyAddress);
+
+        // Modal
+        document
+          .getElementById("info-btn")
+          .addEventListener("click", openModal);
+        document
+          .getElementById("modal-close")
+          .addEventListener("click", closeModal);
+        document
+          .getElementById("modal-overlay")
+          .addEventListener("click", (e) => {
+            if (e.target === document.getElementById("modal-overlay"))
+              closeModal();
+          });
+
+        // News panel
+        document
+          .getElementById("news-btn")
+          .addEventListener("click", toggleNewsPanel);
+        document
+          .getElementById("news-panel-close")
+          .addEventListener("click", closeNewsPanel);
+
+        // Crimes panel
+        document
+          .getElementById("crimes-btn")
+          .addEventListener("click", toggleCrimesPanel);
+        document
+          .getElementById("crimes-panel-close")
+          .addEventListener("click", closeCrimesPanel);
+
+        // Wars panel
+        document
+          .getElementById("wars-btn")
+          .addEventListener("click", toggleWarsPanel);
+        document
+          .getElementById("wars-panel-close")
+          .addEventListener("click", closeWarsPanel);
+
+        // Tensions panel
+        document
+          .getElementById("tensions-btn")
+          .addEventListener("click", toggleTensionsPanel);
+        document
+          .getElementById("tensions-panel-close")
+          .addEventListener("click", closeTensionsPanel);
+
+        setTimeout(() => {
+          document.getElementById("loading").classList.add("hidden");
+        }, 2000);
+
+        animate();
+      }
+
+      function createStarfield() {
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsMaterial = new THREE.PointsMaterial({
+          color: 0xffffff,
+          size: 0.003,
+          transparent: true,
+          opacity: 0.9,
+          sizeAttenuation: true,
+        });
+
+        const starsVertices = [];
+        for (let i = 0; i < 8000; i++) {
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          const r = 40 + Math.random() * 60;
+
+          starsVertices.push(
+            r * Math.sin(phi) * Math.cos(theta),
+            r * Math.sin(phi) * Math.sin(theta),
+            r * Math.cos(phi)
+          );
+        }
+
+        starsGeometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(starsVertices, 3)
+        );
+        const stars = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(stars);
+      }
+
+      function createHighQualityGlobe() {
+        // High resolution sphere
+        const geometry = new THREE.SphereGeometry(1, 128, 128);
+
+        // Load real Earth texture
+        const textureLoader = new THREE.TextureLoader();
+        const earthTexture = textureLoader.load(
+          "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+        );
+        earthTexture.colorSpace = THREE.SRGBColorSpace;
+
+        // Earth material with texture and custom shader for atmosphere
+        const material = new THREE.ShaderMaterial({
+          uniforms: {
+            earthTexture: { value: earthTexture },
+            sunDirection: { value: new THREE.Vector3(1, 0.5, 1).normalize() },
+          },
+          vertexShader: `
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vWorldPosition;
+
+                    void main() {
+                        vUv = uv;
+                        vNormal = normalize(normalMatrix * normal);
+                        vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+          fragmentShader: `
+                    uniform sampler2D earthTexture;
+                    uniform vec3 sunDirection;
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vWorldPosition;
+
+                    void main() {
+                        // Sample Earth texture
+                        vec3 color = texture2D(earthTexture, vUv).rgb;
+
+                        // Lighting
+                        float diffuse = max(0.0, dot(vNormal, sunDirection));
+                        float ambient = 0.4;
+                        color *= (ambient + diffuse * 0.7);
+
+                        // Fresnel rim lighting for atmosphere effect
+                        float fresnel = pow(1.0 - max(0.0, dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
+                        color += vec3(0.2, 0.4, 0.8) * fresnel * 0.4;
+
+                        // Subtle grid overlay
+                        float latLines = abs(sin(vUv.y * 3.14159 * 18.0));
+                        float lngLines = abs(sin(vUv.x * 3.14159 * 36.0));
+                        float grid = smoothstep(0.99, 1.0, latLines) + smoothstep(0.99, 1.0, lngLines);
+                        color += vec3(0.3, 0.5, 0.7) * grid * 0.08;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `,
+        });
+
+        globe = new THREE.Mesh(geometry, material);
+        scene.add(globe);
+      }
+
+      function createSmoothMarkers() {
+        oilData.forEach((data) => {
+          const phi = (90 - data.lat) * (Math.PI / 180);
+          const theta = (data.lng + 180) * (Math.PI / 180);
+
+          const x = -Math.sin(phi) * Math.cos(theta);
+          const y = Math.cos(phi);
+          const z = Math.sin(phi) * Math.sin(theta);
+
+          const position = new THREE.Vector3(x, y, z);
+
+          const maxReserves = 303.2;
+          const sizeScale = Math.pow(data.reserves / maxReserves, 0.6);
+          const baseSize = 0.02 + sizeScale * 0.07;
+
+          const regionColor =
+            regionColors[data.region] || regionColors["americas"];
+
+          // Smooth disc with high segments
+          const discGeometry = new THREE.CircleGeometry(baseSize, 64);
+          const discMaterial = new THREE.MeshBasicMaterial({
+            color: regionColor.main,
+            transparent: true,
+            opacity: 0.85,
+            side: THREE.DoubleSide,
+          });
+
+          const disc = new THREE.Mesh(discGeometry, discMaterial);
+          disc.position.copy(position.clone().multiplyScalar(1.003));
+          disc.lookAt(0, 0, 0);
+          disc.userData = data;
+          globe.add(disc);
+          markers.push(disc);
+
+          // Smooth glow ring
+          const ringGeometry = new THREE.RingGeometry(
+            baseSize * 0.95,
+            baseSize * 1.15,
+            64
+          );
+          const ringMaterial = new THREE.MeshBasicMaterial({
+            color: regionColor.light,
+            transparent: true,
+            opacity: 0.5,
+            side: THREE.DoubleSide,
+          });
+
+          const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+          ring.position.copy(position.clone().multiplyScalar(1.004));
+          ring.lookAt(0, 0, 0);
+          ring.userData = data;
+          globe.add(ring);
+          markers.push(ring);
+
+          // Smooth vertical bar
+          const barHeight = 0.02 + sizeScale * 0.18;
+          const barGeometry = new THREE.CylinderGeometry(
+            0.003,
+            0.005,
+            barHeight,
+            16
+          );
+          const barMaterial = new THREE.MeshBasicMaterial({
+            color: regionColor.light,
+            transparent: true,
+            opacity: 0.7,
+          });
+
+          const bar = new THREE.Mesh(barGeometry, barMaterial);
+          const barPos = position
+            .clone()
+            .normalize()
+            .multiplyScalar(1.005 + barHeight / 2);
+          bar.position.copy(barPos);
+          bar.lookAt(new THREE.Vector3(0, 0, 0));
+          bar.rotateX(Math.PI / 2);
+          bar.userData = data;
+          globe.add(bar);
+          markers.push(bar);
+
+          // Smooth top sphere
+          const sphereSize = 0.006 + sizeScale * 0.012;
+          const sphereGeometry = new THREE.SphereGeometry(sphereSize, 32, 32);
+          const sphereMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.95,
+          });
+
+          const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+          sphere.position.copy(
+            position
+              .clone()
+              .normalize()
+              .multiplyScalar(1.005 + barHeight)
+          );
+          sphere.userData = data;
+          globe.add(sphere);
+          markers.push(sphere);
+
+          // Venezuela eliminated effect
+          if (data.status === "eliminated") {
+            discMaterial.color.setHex(0x8b0000);
+            discMaterial.opacity = 0.6;
+            ringMaterial.color.setHex(0x550000);
+            ringMaterial.opacity = 0.3;
+            barMaterial.color.setHex(0x660000);
+            barMaterial.opacity = 0.4;
+            sphereMaterial.color.setHex(0xff2222);
+            sphereMaterial.opacity = 0.7;
+
+            for (let i = 0; i < 3; i++) {
+              const warningSize = baseSize * (1.5 + i * 0.5);
+              const warningGeometry = new THREE.RingGeometry(
+                warningSize,
+                warningSize + 0.008,
+                64
+              );
+              const warningMaterial2 = new THREE.MeshBasicMaterial({
+                color: 0x8b0000,
+                transparent: true,
+                opacity: 0,
+                side: THREE.DoubleSide,
+              });
+              const warningRing = new THREE.Mesh(warningGeometry, warningMaterial2);
+              warningRing.position.copy(position.clone().multiplyScalar(1.002));
+              warningRing.lookAt(0, 0, 0);
+              warningRing.userData = { ringIndex: i, baseSize: warningSize };
+              globe.add(warningRing);
+              warningRings.push(warningRing);
+            }
+
+            // X mark over Venezuela
+            const xSize = baseSize * 2.5;
+            const xMat = new THREE.LineBasicMaterial({ color: 0xff2222, transparent: true, opacity: 0.8, linewidth: 2 });
+            const xGeo1 = new THREE.BufferGeometry().setFromPoints([
+              new THREE.Vector3(-xSize, -xSize, 0), new THREE.Vector3(xSize, xSize, 0)
+            ]);
+            const xGeo2 = new THREE.BufferGeometry().setFromPoints([
+              new THREE.Vector3(-xSize, xSize, 0), new THREE.Vector3(xSize, -xSize, 0)
+            ]);
+            const xLine1 = new THREE.Line(xGeo1, xMat);
+            const xLine2 = new THREE.Line(xGeo2, xMat);
+            xLine1.position.copy(position.clone().multiplyScalar(1.006));
+            xLine2.position.copy(position.clone().multiplyScalar(1.006));
+            xLine1.lookAt(0, 0, 0);
+            xLine2.lookAt(0, 0, 0);
+            globe.add(xLine1);
+            globe.add(xLine2);
+          }
+
+          // Venezuela warning rings (non-eliminated fallback)
+          if (data.warning && data.status !== "eliminated") {
+            for (let i = 0; i < 3; i++) {
+              const warningSize = baseSize * (1.5 + i * 0.5);
+              const warningGeometry = new THREE.RingGeometry(
+                warningSize,
+                warningSize + 0.008,
+                64
+              );
+              const warningMaterial2 = new THREE.MeshBasicMaterial({
+                color: i === 0 ? 0xff3b3b : 0xff8c00,
+                transparent: true,
+                opacity: 0,
+                side: THREE.DoubleSide,
+              });
+              const warningRing = new THREE.Mesh(warningGeometry, warningMaterial2);
+              warningRing.position.copy(position.clone().multiplyScalar(1.002));
+              warningRing.lookAt(0, 0, 0);
+              warningRing.userData = { ringIndex: i, baseSize: warningSize };
+              globe.add(warningRing);
+              warningRings.push(warningRing);
+            }
+          }
+
+          // Iran engaging effect - intense warzone
+          if (data.status === "engaging") {
+            discMaterial.color.setHex(0xff4400);
+            ringMaterial.color.setHex(0xff6600);
+            barMaterial.color.setHex(0xff5500);
+            sphereMaterial.color.setHex(0xffcc00);
+
+            iranPos = position.clone();
+
+            for (let i = 0; i < 7; i++) {
+              const engageSize = baseSize * (1.3 + i * 0.4);
+              const engageGeo = new THREE.RingGeometry(engageSize, engageSize + 0.008, 64);
+              const colors = [0xff2200, 0xff4400, 0xff6600, 0xff8800, 0xffaa00, 0xff3300, 0xff0000];
+              const engageMat = new THREE.MeshBasicMaterial({
+                color: colors[i],
+                transparent: true,
+                opacity: 0,
+                side: THREE.DoubleSide,
+              });
+              const engageRing = new THREE.Mesh(engageGeo, engageMat);
+              engageRing.position.copy(position.clone().multiplyScalar(1.002));
+              engageRing.lookAt(0, 0, 0);
+              engageRing.userData = { ringIndex: i, baseSize: engageSize };
+              globe.add(engageRing);
+              engagingRings.push(engageRing);
+            }
+
+            // Persistent fire glow around Iran
+            const fireGlowGeo = new THREE.SphereGeometry(baseSize * 2.5, 16, 16);
+            const fireGlowMat = new THREE.MeshBasicMaterial({
+              color: 0xff4400, transparent: true, opacity: 0.15
+            });
+            const fireGlow = new THREE.Mesh(fireGlowGeo, fireGlowMat);
+            fireGlow.position.copy(position.clone().multiplyScalar(1.003));
+            fireGlow.userData = { type: 'fireGlow' };
+            globe.add(fireGlow);
+            engagingRings.push(fireGlow);
+          }
+        });
+      }
+
+      function createAtmosphere() {
+        const geometry = new THREE.SphereGeometry(1.12, 128, 128);
+        const material = new THREE.ShaderMaterial({
+          uniforms: {},
+          vertexShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+          fragmentShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                        float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.5);
+                        vec3 color = mix(vec3(0.2, 0.5, 1.0), vec3(0.1, 0.3, 0.8), intensity);
+                        gl_FragColor = vec4(color, intensity * 0.5);
+                    }
+                `,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide,
+          transparent: true,
+        });
+
+        const atmosphere = new THREE.Mesh(geometry, material);
+        scene.add(atmosphere);
+      }
+
+      function addLights() {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        sunLight.position.set(5, 3, 5);
+        scene.add(sunLight);
+
+        const fillLight = new THREE.DirectionalLight(0x4488ff, 0.2);
+        fillLight.position.set(-5, -3, -5);
+        scene.add(fillLight);
+      }
+
+      // Missile, Bomber, Tanker & Fire System
+      const middleEastTargets = [];
+
+      function latLngToVec3(lat, lng, r) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lng + 180) * (Math.PI / 180);
+        return new THREE.Vector3(
+          -Math.sin(phi) * Math.cos(theta) * r,
+          Math.cos(phi) * r,
+          Math.sin(phi) * Math.sin(theta) * r
+        );
+      }
+
+      function initMissileTargets() {
+        oilData.filter(d => d.region === "middle-east").forEach(d => {
+          const pos = latLngToVec3(d.lat, d.lng, 1);
+          middleEastTargets.push({ x: pos.x, y: pos.y, z: pos.z, country: d.country });
+        });
+
+        // US position for bombers
+        usPos = latLngToVec3(37.09, -95.71, 1);
+        // Iran position
+        iranPos = iranPos || latLngToVec3(32.43, 53.69, 1);
+        // Strait of Hormuz position
+        hormuzPos = latLngToVec3(26.56, 56.25, 1);
+
+        createTankers();
+        createPersistentFire();
+      }
+
+      // Oil tankers trapped at Strait of Hormuz
+      function createTankers() {
+        const tankerPositions = [
+          { lat: 26.56, lng: 56.25 },
+          { lat: 26.35, lng: 56.45 },
+          { lat: 26.70, lng: 56.10 },
+          { lat: 26.48, lng: 56.60 },
+          { lat: 26.80, lng: 56.35 },
+          { lat: 26.30, lng: 56.00 },
+          { lat: 26.60, lng: 56.70 },
+        ];
+        tankerPositions.forEach((tp, idx) => {
+          const pos = latLngToVec3(tp.lat, tp.lng, 1.005);
+
+          // Diamond shape marker (rotated square)
+          const dGeo = new THREE.BufferGeometry();
+          const s = 0.008;
+          const verts = new Float32Array([
+            0, s, 0,  s*0.6, 0, 0,  0, -s, 0,
+            0, s, 0,  0, -s, 0,  -s*0.6, 0, 0,
+          ]);
+          dGeo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+          const dMat = new THREE.MeshBasicMaterial({
+            color: 0x88ccff, transparent: true, opacity: 0.85, side: THREE.DoubleSide,
+          });
+          const diamond = new THREE.Mesh(dGeo, dMat);
+          diamond.position.copy(pos);
+          diamond.lookAt(0, 0, 0);
+          globe.add(diamond);
+
+          // Tiny pulsing ring around tanker
+          const tRingGeo = new THREE.RingGeometry(0.009, 0.012, 16);
+          const tRingMat = new THREE.MeshBasicMaterial({
+            color: 0xff4444, transparent: true, opacity: 0.4, side: THREE.DoubleSide,
+          });
+          const tRing = new THREE.Mesh(tRingGeo, tRingMat);
+          tRing.position.copy(pos);
+          tRing.lookAt(0, 0, 0);
+          tRing.userData = { tankerIdx: idx };
+          globe.add(tRing);
+
+          tankerMarkers.push({ diamond, ring: tRing, pos });
+        });
+
+        // "BLOCKADE" zone ring at Hormuz
+        const blockadeGeo = new THREE.RingGeometry(0.06, 0.065, 64);
+        const blockadeMat = new THREE.MeshBasicMaterial({
+          color: 0xff3333, transparent: true, opacity: 0.35, side: THREE.DoubleSide,
+        });
+        const blockade = new THREE.Mesh(blockadeGeo, blockadeMat);
+        const hPos = latLngToVec3(26.56, 56.25, 1.003);
+        blockade.position.copy(hPos);
+        blockade.lookAt(0, 0, 0);
+        blockade.userData = { type: 'blockade' };
+        globe.add(blockade);
+        engagingRings.push(blockade);
+      }
+
+      // Persistent fire particles around Iran
+      function createPersistentFire() {
+        const iranCenter = latLngToVec3(32.43, 53.69, 1.01);
+        for (let i = 0; i < 25; i++) {
+          const size = 0.003 + Math.random() * 0.005;
+          const geo = new THREE.SphereGeometry(size, 6, 6);
+          const c = new THREE.Color().lerpColors(
+            new THREE.Color(0xff2200), new THREE.Color(0xffcc00), Math.random()
+          );
+          const mat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.6 });
+          const p = new THREE.Mesh(geo, mat);
+          const spread = 0.06;
+          p.position.set(
+            iranCenter.x + (Math.random() - 0.5) * spread,
+            iranCenter.y + (Math.random() - 0.5) * spread,
+            iranCenter.z + (Math.random() - 0.5) * spread
+          );
+          p.userData = {
+            baseY: p.position.y,
+            speed: 1 + Math.random() * 3,
+            phase: Math.random() * Math.PI * 2,
+            drift: new THREE.Vector3((Math.random()-0.5)*0.0003, 0.0005 + Math.random()*0.001, (Math.random()-0.5)*0.0003),
+            origin: p.position.clone(),
+            maxLife: 2 + Math.random() * 3,
+            life: Math.random() * 3,
+          };
+          globe.add(p);
+          fireParticles.push(p);
+        }
+      }
+
+      function spawnMissile() {
+        // Prioritize Iran as target (60% chance)
+        let target;
+        if (Math.random() < 0.6) {
+          target = middleEastTargets.find(t => t.country === "Iran") || middleEastTargets[0];
+        } else {
+          target = middleEastTargets[Math.floor(Math.random() * middleEastTargets.length)];
+        }
+        const targetPos = new THREE.Vector3(target.x, target.y, target.z).normalize().multiplyScalar(1.01);
+
+        const angle = Math.random() * Math.PI * 2;
+        const offsetDist = 0.3 + Math.random() * 0.5;
+        const offset = new THREE.Vector3(
+          Math.cos(angle) * offsetDist,
+          0.1 + Math.random() * 0.35,
+          Math.sin(angle) * offsetDist
+        );
+        const startPos = targetPos.clone().add(offset).normalize().multiplyScalar(1.35 + Math.random() * 0.4);
+
+        const missileGeo = new THREE.ConeGeometry(0.005, 0.022, 6);
+        const missileMat = new THREE.MeshBasicMaterial({ color: 0xff3300, transparent: true, opacity: 0.95 });
+        const missile = new THREE.Mesh(missileGeo, missileMat);
+        missile.position.copy(startPos);
+        globe.add(missile);
+
+        const trailPoints = [];
+        for (let i = 0; i < 25; i++) trailPoints.push(startPos.clone());
+        const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
+        const trailMat = new THREE.LineBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0.5 });
+        const trail = new THREE.Line(trailGeo, trailMat);
+        globe.add(trail);
+
+        const glowGeo = new THREE.SphereGeometry(0.012, 8, 8);
+        const glowMat = new THREE.MeshBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0.7 });
+        const glow = new THREE.Mesh(glowGeo, glowMat);
+        glow.position.copy(startPos);
+        globe.add(glow);
+
+        missiles.push({
+          mesh: missile, trail, trailGeo, trailPoints, glow,
+          start: startPos.clone(), target: targetPos.clone(),
+          progress: 0,
+          speed: 0.005 + Math.random() * 0.008,
+          arcHeight: 0.1 + Math.random() * 0.2,
+          alive: true
+        });
+      }
+
+      // Bomber planes from US to Iran
+      function spawnBomber() {
+        if (!usPos || !iranPos) return;
+        const startPos = latLngToVec3(37.09, -95.71, 1.06);
+        const targetPos = latLngToVec3(32.43 + (Math.random()-0.5)*4, 53.69 + (Math.random()-0.5)*6, 1.02);
+
+        // Plane body (elongated shape)
+        const bodyGeo = new THREE.ConeGeometry(0.005, 0.03, 4);
+        const bodyMat = new THREE.MeshBasicMaterial({ color: 0x445566, transparent: true, opacity: 0.9 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.copy(startPos);
+        globe.add(body);
+
+        // Wing
+        const wingGeo = new THREE.PlaneGeometry(0.025, 0.004);
+        const wingMat = new THREE.MeshBasicMaterial({ color: 0x556677, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+        const wing = new THREE.Mesh(wingGeo, wingMat);
+        body.add(wing);
+        wing.rotation.x = Math.PI / 2;
+        wing.position.y = -0.005;
+
+        // Trail
+        const trailPoints = [];
+        for (let i = 0; i < 40; i++) trailPoints.push(startPos.clone());
+        const trailGeo = new THREE.BufferGeometry().setFromPoints(trailPoints);
+        const trailMat = new THREE.LineBasicMaterial({ color: 0xaaccff, transparent: true, opacity: 0.25 });
+        const trail = new THREE.Line(trailGeo, trailMat);
+        globe.add(trail);
+
+        // Engine glow
+        const eGeo = new THREE.SphereGeometry(0.004, 6, 6);
+        const eMat = new THREE.MeshBasicMaterial({ color: 0x4488ff, transparent: true, opacity: 0.5 });
+        const engine = new THREE.Mesh(eGeo, eMat);
+        engine.position.copy(startPos);
+        globe.add(engine);
+
+        bombers.push({
+          mesh: body, trail, trailGeo, trailPoints, engine,
+          start: startPos.clone(), target: targetPos.clone(),
+          progress: 0,
+          speed: 0.0015 + Math.random() * 0.001,
+          arcHeight: 0.25 + Math.random() * 0.15,
+          alive: true,
+          hasBombed: false
+        });
+      }
+
+      function spawnExplosion(position, big) {
+        const count = big ? 30 : 18;
+        const particles = [];
+        for (let i = 0; i < count; i++) {
+          const size = big ? (0.003 + Math.random() * 0.006) : (0.002 + Math.random() * 0.004);
+          const geo = new THREE.SphereGeometry(size, 6, 6);
+          const t = Math.random();
+          const color = new THREE.Color().lerpColors(
+            new THREE.Color(0xff1100),
+            t < 0.5 ? new THREE.Color(0xff8800) : new THREE.Color(0xffee00),
+            t
+          );
+          const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1.0 });
+          const p = new THREE.Mesh(geo, mat);
+          p.position.copy(position);
+          const spread = big ? 0.012 : 0.008;
+          p.userData.velocity = new THREE.Vector3(
+            (Math.random() - 0.5) * spread,
+            (Math.random() - 0.5) * spread,
+            (Math.random() - 0.5) * spread
+          );
+          globe.add(p);
+          particles.push(p);
+        }
+
+        const flashSize = big ? 0.035 : 0.02;
+        const flashGeo = new THREE.SphereGeometry(flashSize, 12, 12);
+        const flashMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 1.0 });
+        const flash = new THREE.Mesh(flashGeo, flashMat);
+        flash.position.copy(position);
+        globe.add(flash);
+
+        const shockSize = big ? 0.008 : 0.005;
+        const shockGeo = new THREE.RingGeometry(0.001, shockSize, 32);
+        const shockMat = new THREE.MeshBasicMaterial({ color: 0xff4400, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+        const shock = new THREE.Mesh(shockGeo, shockMat);
+        shock.position.copy(position);
+        shock.lookAt(0, 0, 0);
+        globe.add(shock);
+
+        // Secondary fire ring for big explosions
+        let fireRing = null;
+        if (big) {
+          const frGeo = new THREE.RingGeometry(0.002, 0.015, 32);
+          const frMat = new THREE.MeshBasicMaterial({ color: 0xff2200, transparent: true, opacity: 0.7, side: THREE.DoubleSide });
+          fireRing = new THREE.Mesh(frGeo, frMat);
+          fireRing.position.copy(position);
+          fireRing.lookAt(0, 0, 0);
+          globe.add(fireRing);
+        }
+
+        explosions.push({ particles, flash, shock, fireRing, life: 1.0, alive: true, big });
+      }
+
+      function updateMissiles(dt) {
+        // Spawn missiles more frequently
+        missileSpawnTimer += dt;
+        if (missileSpawnTimer > 0.3 + Math.random() * 0.6 && missiles.length < 15) {
+          spawnMissile();
+          missileSpawnTimer = 0;
+        }
+
+        // Spawn bombers
+        bomberSpawnTimer += dt;
+        if (bomberSpawnTimer > 4 + Math.random() * 6 && bombers.length < 4) {
+          spawnBomber();
+          bomberSpawnTimer = 0;
+        }
+
+        // Update missiles
+        for (let i = missiles.length - 1; i >= 0; i--) {
+          const m = missiles[i];
+          if (!m.alive) continue;
+
+          m.progress += m.speed;
+          const t = m.progress;
+
+          if (t >= 1.0) {
+            spawnExplosion(m.target.clone(), false);
+            globe.remove(m.mesh);
+            globe.remove(m.trail);
+            globe.remove(m.glow);
+            m.alive = false;
+            missiles.splice(i, 1);
+            continue;
+          }
+
+          const pos = new THREE.Vector3().lerpVectors(m.start, m.target, t);
+          const arcOffset = Math.sin(t * Math.PI) * m.arcHeight;
+          const up = pos.clone().normalize();
+          pos.add(up.multiplyScalar(arcOffset));
+          m.mesh.position.copy(pos);
+          m.glow.position.copy(pos);
+
+          const lookTarget = new THREE.Vector3().lerpVectors(m.start, m.target, Math.min(t + 0.05, 1.0));
+          const lookArc = Math.sin(Math.min(t + 0.05, 1.0) * Math.PI) * m.arcHeight;
+          lookTarget.add(lookTarget.clone().normalize().multiplyScalar(lookArc));
+          m.mesh.lookAt(lookTarget);
+          m.mesh.rotateX(Math.PI / 2);
+
+          m.trailPoints.pop();
+          m.trailPoints.unshift(pos.clone());
+          m.trailGeo.setFromPoints(m.trailPoints);
+
+          m.glow.material.opacity = 0.4 + Math.sin(time * 10) * 0.3;
+          m.mesh.material.opacity = 0.7 + Math.sin(time * 8) * 0.3;
+        }
+
+        // Update bombers
+        for (let i = bombers.length - 1; i >= 0; i--) {
+          const b = bombers[i];
+          if (!b.alive) continue;
+
+          b.progress += b.speed;
+          const t = b.progress;
+
+          if (t >= 1.0) {
+            spawnExplosion(b.target.clone(), true);
+            globe.remove(b.mesh);
+            globe.remove(b.trail);
+            globe.remove(b.engine);
+            b.alive = false;
+            bombers.splice(i, 1);
+            continue;
+          }
+
+          // Drop bombs when near target (70-90% progress)
+          if (t > 0.7 && !b.hasBombed) {
+            b.hasBombed = true;
+            const bombPos = new THREE.Vector3().lerpVectors(b.start, b.target, t);
+            const arcOff = Math.sin(t * Math.PI) * b.arcHeight;
+            bombPos.add(bombPos.clone().normalize().multiplyScalar(arcOff));
+            spawnExplosion(b.target.clone(), true);
+          }
+
+          const pos = new THREE.Vector3().lerpVectors(b.start, b.target, t);
+          const arcOffset = Math.sin(t * Math.PI) * b.arcHeight;
+          const up = pos.clone().normalize();
+          pos.add(up.multiplyScalar(arcOffset));
+          b.mesh.position.copy(pos);
+          b.engine.position.copy(pos);
+
+          const lookTarget = new THREE.Vector3().lerpVectors(b.start, b.target, Math.min(t + 0.03, 1.0));
+          const la = Math.sin(Math.min(t + 0.03, 1.0) * Math.PI) * b.arcHeight;
+          lookTarget.add(lookTarget.clone().normalize().multiplyScalar(la));
+          b.mesh.lookAt(lookTarget);
+          b.mesh.rotateX(Math.PI / 2);
+
+          b.trailPoints.pop();
+          b.trailPoints.unshift(pos.clone());
+          b.trailGeo.setFromPoints(b.trailPoints);
+
+          b.engine.material.opacity = 0.3 + Math.sin(time * 6) * 0.2;
+        }
+
+        // Update explosions
+        for (let i = explosions.length - 1; i >= 0; i--) {
+          const e = explosions[i];
+          if (!e.alive) continue;
+
+          const decaySpeed = e.big ? 0.8 : 1.2;
+          e.life -= dt * decaySpeed;
+          if (e.life <= 0) {
+            e.particles.forEach(p => globe.remove(p));
+            globe.remove(e.flash);
+            globe.remove(e.shock);
+            if (e.fireRing) globe.remove(e.fireRing);
+            e.alive = false;
+            explosions.splice(i, 1);
+            continue;
+          }
+
+          e.particles.forEach(p => {
+            p.position.add(p.userData.velocity);
+            p.material.opacity = e.life;
+            p.userData.velocity.multiplyScalar(0.95);
+          });
+
+          e.flash.material.opacity = e.life * 0.9;
+          const flashScale = e.big ? (1 + (1 - e.life) * 5) : (1 + (1 - e.life) * 3);
+          e.flash.scale.setScalar(flashScale);
+
+          const shockScale = e.big ? (1 + (1 - e.life) * 12) : (1 + (1 - e.life) * 8);
+          e.shock.scale.setScalar(shockScale);
+          e.shock.material.opacity = e.life * 0.6;
+
+          if (e.fireRing) {
+            const frScale = 1 + (1 - e.life) * 6;
+            e.fireRing.scale.setScalar(frScale);
+            e.fireRing.material.opacity = e.life * 0.5;
+          }
+        }
+
+        // Update fire particles
+        fireParticles.forEach(p => {
+          const d = p.userData;
+          d.life += dt;
+          if (d.life > d.maxLife) {
+            p.position.copy(d.origin);
+            d.life = 0;
+            p.material.opacity = 0.6;
+          }
+          const t2 = d.life / d.maxLife;
+          p.position.add(d.drift);
+          p.material.opacity = (1 - t2) * 0.7;
+          const flicker = 0.8 + Math.sin(time * d.speed + d.phase) * 0.2;
+          p.scale.setScalar(flicker);
+        });
+
+        // Animate tanker markers
+        tankerMarkers.forEach((tm, idx) => {
+          const pulse = 0.3 + Math.sin(time * 2 + idx * 0.7) * 0.2;
+          tm.ring.material.opacity = pulse;
+          const s = 1 + Math.sin(time * 1.5 + idx) * 0.1;
+          tm.ring.scale.setScalar(s);
+        });
+      }
+
+      function copyAddress() {
+        const address = document.getElementById("contract-address").textContent;
+        navigator.clipboard.writeText(address).then(() => {
+          const btn = document.getElementById("copy-btn");
+          btn.classList.add("copied");
+          btn.innerHTML =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+          setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.innerHTML =
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+          }, 2000);
+        });
+      }
+
+      function openModal() {
+        document.getElementById("modal-overlay").classList.add("active");
+      }
+
+      function closeModal() {
+        document.getElementById("modal-overlay").classList.remove("active");
+      }
+
+      function closeAllPanels() {
+        document.getElementById("news-panel").classList.remove("active");
+        document.getElementById("crimes-panel").classList.remove("active");
+        document.getElementById("wars-panel").classList.remove("active");
+        document.getElementById("tensions-panel").classList.remove("active");
+      }
+
+      function toggleNewsPanel() {
+        const isActive = document
+          .getElementById("news-panel")
+          .classList.contains("active");
+        closeAllPanels();
+        if (!isActive)
+          document.getElementById("news-panel").classList.add("active");
+      }
+
+      function closeNewsPanel() {
+        document.getElementById("news-panel").classList.remove("active");
+      }
+
+      function toggleCrimesPanel() {
+        const isActive = document
+          .getElementById("crimes-panel")
+          .classList.contains("active");
+        closeAllPanels();
+        if (!isActive)
+          document.getElementById("crimes-panel").classList.add("active");
+      }
+
+      function closeCrimesPanel() {
+        document.getElementById("crimes-panel").classList.remove("active");
+      }
+
+      function toggleWarsPanel() {
+        const isActive = document
+          .getElementById("wars-panel")
+          .classList.contains("active");
+        closeAllPanels();
+        if (!isActive)
+          document.getElementById("wars-panel").classList.add("active");
+      }
+
+      function closeWarsPanel() {
+        document.getElementById("wars-panel").classList.remove("active");
+      }
+
+      function toggleTensionsPanel() {
+        const isActive = document
+          .getElementById("tensions-panel")
+          .classList.contains("active");
+        closeAllPanels();
+        if (!isActive)
+          document.getElementById("tensions-panel").classList.add("active");
+      }
+
+      function closeTensionsPanel() {
+        document.getElementById("tensions-panel").classList.remove("active");
+      }
+
+      function onMouseDown(event) {
+        isDragging = true;
+        autoRotate = false;
+        previousMousePosition = { x: event.clientX, y: event.clientY };
+        renderer.domElement.style.cursor = "grabbing";
+      }
+
+      function onMouseUp() {
+        isDragging = false;
+        renderer.domElement.style.cursor = "grab";
+        setTimeout(() => {
+          autoRotate = true;
+        }, 3000);
+      }
+
+      function onMouseMove(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        if (isDragging) {
+          const deltaX = event.clientX - previousMousePosition.x;
+          const deltaY = event.clientY - previousMousePosition.y;
+
+          globe.rotation.y += deltaX * 0.005;
+          globe.rotation.x += deltaY * 0.005;
+          globe.rotation.x = Math.max(
+            -Math.PI / 2,
+            Math.min(Math.PI / 2, globe.rotation.x)
+          );
+
+          previousMousePosition = { x: event.clientX, y: event.clientY };
+        } else {
+          checkHover(event);
+        }
+      }
+
+      function checkHover(event) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(markers);
+
+        const tooltip = document.getElementById("tooltip");
+
+        if (intersects.length > 0) {
+          const data = intersects[0].object.userData;
+          if (data && data.country) {
+            tooltip.classList.add("visible");
+            tooltip.classList.remove("venezuela", "eliminated", "engaging");
+
+            if (data.status === "eliminated") tooltip.classList.add("eliminated");
+            else if (data.status === "engaging") tooltip.classList.add("engaging");
+            else if (data.warning) tooltip.classList.add("venezuela");
+
+            tooltip.style.left =
+              Math.min(event.clientX + 15, window.innerWidth - 240) + "px";
+            tooltip.style.top = event.clientY - 10 + "px";
+
+            document.getElementById("tooltip-country").textContent =
+              data.country;
+            document.getElementById(
+              "tooltip-flag"
+            ).src = `https://flagcdn.com/w40/${data.code.toLowerCase()}.png`;
+            document.getElementById(
+              "tooltip-reserves"
+            ).textContent = `${data.reserves}B barrels`;
+            document.getElementById(
+              "tooltip-rank"
+            ).textContent = `#${data.rank} in World Reserves`;
+
+            const tooltipWarning = document.getElementById("tooltip-warning");
+            tooltipWarning.style.display = (data.warning && !data.status) ? "flex" : "none";
+
+            document.getElementById("tooltip-status-eliminated").style.display =
+              data.status === "eliminated" ? "flex" : "none";
+            document.getElementById("tooltip-status-engaging").style.display =
+              data.status === "engaging" ? "flex" : "none";
+
+            renderer.domElement.style.cursor = "pointer";
+          }
+        } else {
+          tooltip.classList.remove("visible", "venezuela", "eliminated", "engaging");
+          if (!isDragging) renderer.domElement.style.cursor = "grab";
+        }
+      }
+
+      function onClick(event) {
+        if (isDragging) return;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(markers);
+
+        if (intersects.length > 0) {
+          const data = intersects[0].object.userData;
+          if (data && data.country) {
+            showInfoPanel(data);
+          }
+        }
+      }
+
+      function showInfoPanel(data) {
+        const panel = document.getElementById("info-panel");
+        const regionColor =
+          regionColors[data.region] || regionColors["americas"];
+
+        panel.classList.remove("venezuela", "eliminated", "engaging");
+        document.getElementById("info-warning").style.display = "none";
+        document.getElementById("info-status-eliminated").style.display = "none";
+        document.getElementById("info-status-engaging").style.display = "none";
+
+        if (data.status === "eliminated") {
+          panel.classList.add("eliminated");
+          document.getElementById(
+            "info-header-bg"
+          ).style.background = `linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(80, 0, 0, 0.15))`;
+          document.getElementById("info-status-eliminated").style.display = "flex";
+        } else if (data.status === "engaging") {
+          panel.classList.add("engaging");
+          document.getElementById(
+            "info-header-bg"
+          ).style.background = `linear-gradient(135deg, rgba(255, 100, 0, 0.2), rgba(255, 60, 0, 0.12))`;
+          document.getElementById("info-status-engaging").style.display = "flex";
+        } else if (data.warning) {
+          panel.classList.add("venezuela");
+          document.getElementById(
+            "info-header-bg"
+          ).style.background = `linear-gradient(135deg, rgba(255, 59, 59, 0.15), rgba(255, 140, 0, 0.1))`;
+          document.getElementById("info-warning").style.display = "flex";
+        } else {
+          document.getElementById(
+            "info-header-bg"
+          ).style.background = `linear-gradient(135deg, ${regionColor.hex}40, ${regionColor.hex}10)`;
+        }
+
+        document.getElementById(
+          "info-flag"
+        ).src = `https://flagcdn.com/w80/${data.code.toLowerCase()}.png`;
+        document.getElementById("info-country").textContent = data.country;
+
+        if (data.status === "eliminated") {
+          document.getElementById("info-rank").textContent = `#${data.rank} Global Oil Reserves — ELIMINATED`;
+        } else if (data.status === "engaging") {
+          document.getElementById("info-rank").textContent = `#${data.rank} Global Oil Reserves — CURRENTLY ENGAGING`;
+        } else {
+          document.getElementById("info-rank").textContent = `#${data.rank} Global Oil Reserves`;
+        }
+
+        document.getElementById(
+          "info-reserves"
+        ).innerHTML = `${data.reserves}<span>B bbl</span>`;
+        document.getElementById(
+          "info-production"
+        ).innerHTML = `${data.production}<span>M bpd</span>`;
+
+        const yearsSupply = Math.round(
+          (data.reserves * 1000) / (data.production * 365)
+        );
+        document.getElementById(
+          "info-years"
+        ).innerHTML = `${yearsSupply}<span> years</span>`;
+        document.getElementById("info-world-rank").innerHTML = `#${data.rank}`;
+
+        const percent = ((data.reserves / totalReserves) * 100).toFixed(1);
+        document.getElementById("info-percent").textContent = `${percent}%`;
+        document.getElementById("info-bar").style.width = `${percent}%`;
+
+        let barColor = regionColor.hex;
+        if (data.status === "eliminated") barColor = "#8b0000";
+        else if (data.status === "engaging") barColor = "#ff6600";
+        else if (data.warning) barColor = "#ff3b3b";
+
+        document.getElementById(
+          "info-bar"
+        ).style.background = `linear-gradient(90deg, ${barColor}, ${barColor}cc)`;
+
+        panel.classList.add("active");
+      }
+
+      function closeInfoPanel() {
+        document.getElementById("info-panel").classList.remove("active");
+      }
+
+      function onWheel(event) {
+        camera.position.z += event.deltaY * 0.001;
+        camera.position.z = Math.max(1.8, Math.min(5, camera.position.z));
+      }
+
+      // Touch handlers for mobile
+      let touchStartPos = { x: 0, y: 0 };
+      let lastTouchDistance = 0;
+      let isTouchDragging = false;
+
+      function onTouchStart(event) {
+        event.preventDefault();
+
+        if (event.touches.length === 1) {
+          // Single finger - rotate
+          isTouchDragging = true;
+          autoRotate = false;
+          touchStartPos = {
+            x: event.touches[0].clientX,
+            y: event.touches[0].clientY,
+          };
+          previousMousePosition = {
+            x: event.touches[0].clientX,
+            y: event.touches[0].clientY,
+          };
+        } else if (event.touches.length === 2) {
+          // Two fingers - pinch to zoom
+          const dx = event.touches[0].clientX - event.touches[1].clientX;
+          const dy = event.touches[0].clientY - event.touches[1].clientY;
+          lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+        }
+      }
+
+      function onTouchMove(event) {
+        event.preventDefault();
+
+        if (event.touches.length === 1 && isTouchDragging) {
+          // Single finger - rotate globe
+          const touch = event.touches[0];
+          const deltaX = touch.clientX - previousMousePosition.x;
+          const deltaY = touch.clientY - previousMousePosition.y;
+
+          globe.rotation.y += deltaX * 0.005;
+          globe.rotation.x += deltaY * 0.005;
+          globe.rotation.x = Math.max(
+            -Math.PI / 2,
+            Math.min(Math.PI / 2, globe.rotation.x)
+          );
+
+          previousMousePosition = { x: touch.clientX, y: touch.clientY };
+        } else if (event.touches.length === 2) {
+          // Two fingers - pinch to zoom
+          const dx = event.touches[0].clientX - event.touches[1].clientX;
+          const dy = event.touches[0].clientY - event.touches[1].clientY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (lastTouchDistance > 0) {
+            const delta = lastTouchDistance - distance;
+            camera.position.z += delta * 0.01;
+            camera.position.z = Math.max(1.8, Math.min(5, camera.position.z));
+          }
+
+          lastTouchDistance = distance;
+        }
+      }
+
+      function onTouchEnd(event) {
+        event.preventDefault();
+
+        // Check if it was a tap (short touch without much movement)
+        if (event.changedTouches.length === 1 && isTouchDragging) {
+          const touch = event.changedTouches[0];
+          const dx = touch.clientX - touchStartPos.x;
+          const dy = touch.clientY - touchStartPos.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          // If barely moved, treat as tap/click
+          if (distance < 10) {
+            // Update mouse position for raycasting
+            mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+
+            // Trigger click handler - same as desktop onClick
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(markers);
+            if (intersects.length > 0) {
+              const data = intersects[0].object.userData;
+              if (data && data.country) {
+                showInfoPanel(data);
+              }
+            }
+          }
+        }
+
+        isTouchDragging = false;
+        lastTouchDistance = 0;
+        setTimeout(() => {
+          autoRotate = true;
+        }, 3000);
+      }
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      let time = 0;
+      function animate() {
+        requestAnimationFrame(animate);
+        time += 0.016;
+
+        if (autoRotate && !isDragging) {
+          globe.rotation.y += 0.0008;
+        }
+
+        // Animate warning rings for Venezuela (now eliminated - slow flicker)
+        warningRings.forEach((ring) => {
+          const data = ring.userData;
+          const pulse = (Math.sin(time * 1.2 - data.ringIndex * 1.0) + 1) * 0.5;
+          ring.material.opacity = pulse * 0.25;
+          const scale = 1 + pulse * 0.1;
+          ring.scale.set(scale, scale, scale);
+        });
+
+        // Animate engaging rings for Iran - intense warzone
+        engagingRings.forEach((ring) => {
+          const data = ring.userData;
+          if (data.type === 'fireGlow') {
+            ring.material.opacity = 0.1 + Math.sin(time * 4) * 0.08;
+            const s = 1 + Math.sin(time * 2) * 0.1;
+            ring.scale.setScalar(s);
+          } else if (data.type === 'blockade') {
+            ring.material.opacity = 0.2 + Math.sin(time * 2.5) * 0.15;
+            const s = 1 + Math.sin(time * 1.8) * 0.08;
+            ring.scale.setScalar(s);
+          } else if (data.ringIndex !== undefined) {
+            const pulse = (Math.sin(time * 4.5 - data.ringIndex * 0.5) + 1) * 0.5;
+            ring.material.opacity = pulse * 0.65;
+            const scale = 1 + pulse * 0.25;
+            ring.scale.set(scale, scale, scale);
+          }
+        });
+
+        // Animate marker spheres
+        markers.forEach((marker, i) => {
+          if (
+            marker.geometry.type === "SphereGeometry" &&
+            marker.geometry.parameters.radius < 0.02
+          ) {
+            const pulse = 1 + Math.sin(time * 3 + i * 0.3) * 0.15;
+            marker.scale.set(pulse, pulse, pulse);
+          }
+        });
+
+        // Missiles and explosions
+        updateMissiles(0.016);
+
+        renderer.render(scene, camera);
+      }
+
+      // Splash screen logic
+      const splashOverlay = document.getElementById("splash-overlay");
+      const splashVideo = document.getElementById("splash-video");
+      const splashBtn = document.getElementById("splash-btn");
+
+      if (splashVideo) {
+        // Ensure button appears when video finishes
+        splashVideo.addEventListener("ended", () => {
+          if (splashBtn) splashBtn.style.display = "inline-flex";
+        });
+
+        // Fallback: if autoplay fails or user pauses, still show button after a timeout
+        let splashTimeoutShown = false;
+        const showSplashButtonFallback = () => {
+          if (!splashTimeoutShown && splashBtn && splashBtn.style.display === "none") {
+            splashBtn.style.display = "inline-flex";
+            splashTimeoutShown = true;
+          }
+        };
+
+        splashVideo.addEventListener("error", showSplashButtonFallback);
+        splashVideo.addEventListener("pause", () => {
+          setTimeout(showSplashButtonFallback, 2000);
+        });
+
+        // As an absolute fallback, show button after 20 seconds
+        setTimeout(showSplashButtonFallback, 20000);
+      }
+
+      if (splashBtn && splashOverlay) {
+        splashBtn.addEventListener("click", () => {
+          splashOverlay.classList.add("hidden");
+          setTimeout(() => {
+            splashOverlay.style.display = "none";
+          }, 650);
+        });
+      }
+
+      init();
+    </script>
+  </body>
+</html>
